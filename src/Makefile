@@ -21,12 +21,13 @@ SRC=$(wildcard $(PATH_SRC)*.cpp)
 OBJS=$(addprefix $(PATH_DST), $(SRC:.cpp=.o ))
 
 
-all:$(config) $(PATH_DST)$(EXEC) launch
+all: $(PATH_DST)$(EXEC) clean launch
 
 $(PATH_DST)$(EXEC): $(OBJS)
 	$(CC) $(PATH_DST)$(OBJS) -o $@
 
-%.o: %.cpp
+$(OBJS): $(SRC)
+	echo $(SRC)
 	$(CC) $(CFLAGS) -c $< -o $(PATH_DST)$@
 
 configure_win:
