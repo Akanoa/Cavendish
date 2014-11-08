@@ -21,4 +21,4 @@ std::string num2string(T x)
 }
 
 
-std::string float2scientific(float d);
+std::string float2scientific(float d, int nb_digit=NB_DIGIT);

@@ -28,7 +28,7 @@ string getFileName(string &strPath)
 }
 
 
-string float2scientific(float d)
+string float2scientific(float d, int nb_digit)
 {
 	char buffer[30];
 	double param, fractpart, intpart;
@@ -66,7 +66,7 @@ string float2scientific(float d)
 
 	string dec = s.substr(s.find_last_of(".")+1);
 
-	dec = dec.append(NB_DIGIT-dec.size(),'0');
+	dec = dec.append(nb_digit-dec.size(),'0');
 
 	sprintf(buffer, "%d.%sE%s%.02d", (int)intpart ,dec.c_str(), signe.c_str(), (int)exposant);
 

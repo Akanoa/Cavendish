@@ -11,13 +11,16 @@
 
 
 enum {HEADER, NB_POINT, POINT, COURBE, SEGMENT, END};
+enum {LINUX, WINDOW};
 
-const char *sep =
+int os =
 #ifdef _WIN32
-    "\\\\";
+    WINDOW;
 #else
-    "/";
+    LINUX;
 #endif
+
+const char *sep = "\\\\";
 
 using namespace std;
 
@@ -30,7 +33,11 @@ int main(int argc, char **argv)
     string src(src_), dst(dst_);
 
     //generate result dir
-    mkdir(dst.substr(0, dst.find_last_of(sep)-1).c_str(), 0700);
+    #if WINDOW
+        mkdir(dst.substr(0, dst.find_last_of(sep)-1).c_str(), 0700);
+    #else
+        mkdir(dst.substr(0, dst.find_last_of(sep)-1).c_str());
+    #endif
 
     cout << getFileName(dst) << endl;
 
@@ -44,11 +51,12 @@ int main(int argc, char **argv)
     ifstream input(src.c_str(), ifstream::in);
 
     int nb_final_points(0);
-    int nb_original_points(0);
+    int nb_elements(0);
 
     string line;
     vector<string> lines;
     vector<string> original_points;
+    vector<string> generated_points;
 
     int state = HEADER;
 
@@ -73,7 +81,6 @@ int main(int argc, char **argv)
                 lines.push_back(line);
             break;
         case NB_POINT:
-            nb_original_points = atoi(line.c_str());
             state = POINT;
             break;
         case POINT:
@@ -85,7 +92,6 @@ int main(int argc, char **argv)
                 sscanf(line.c_str(), "%*s %f %f %*s", &x, &y);
                 node = initNode(x, y, ORIGINAL);
                 addElement<struct Node>(nodes, node);
-                original_points.push_back(line);
             }
             break;
         case SEGMENT:
@@ -110,11 +116,21 @@ int main(int argc, char **argv)
 /*    cout << "first  node x: "<< getNode(nodes, 1)->x << endl;
     cout << "second node x: "<< getNode(nodes, 2)->x << endl;*/
 
+    //generate list of points
     struct Node *tmp;
     for (int i=1; i <= nodes->nb; i++)
     {
         tmp = getElement<struct Node>(nodes, i);
         cout << "node: " << tmp->id << "\tx:"<< tmp->x << endl << "\ty:"<< tmp->y << endl;
+
+        char line_tmp[100];
+        sprintf(line_tmp, "%4d  %s  %s%6d%6d", i, float2scientific(tmp->x, 10).c_str(), float2scientific(tmp->y, 10).c_str(), i, tmp->type);
+        string str_tmp(line_tmp);
+        generated_points.push_back(str_tmp);
+        sprintf(line_tmp, "%d  %s  %s", i, float2scientific(tmp->x, 9).c_str(), float2scientific(tmp->y, 9).c_str());
+        str_tmp = line_tmp;
+        original_points.push_back(str_tmp);
+        nb_final_points++;
     }
 
     struct Segment *tmp2;
@@ -147,12 +163,18 @@ int main(int argc, char **argv)
     lines.push_back("THPLAN");
     lines.push_back("$NOEUDS");
     lines.push_back(num2string(nb_final_points));
+    lines.insert(lines.end(), generated_points.begin(), generated_points.end());
     lines.push_back("####TODO####");
     lines.push_back("$limites de zones");
     lines.push_back("####TODO####");
     lines.push_back("$points a mailler");
-    lines.push_back(num2string(nb_original_points));
     lines.insert(lines.end(), original_points.begin(), original_points.end());
+    lines.push_back("0");
+    lines.push_back("$ELEMENTS");
+    lines.push_back(num2string(nb_elements));
+    lines.push_back("####TODO####");
+    string footer = "$materiaux\n11\nMOD  2.100000E+11\nPOI  3.000000E-01\nMAS  7.800000E+03\nDIL  1.300000E-05\nCON  5.000000E+01\nLIM  2.500000E+08\nCAP  4.500000E+02\nNOM Acier\n///\n0\n$epaisseurs\n11 0.00000E+00\n0\n$fin du fichier";
+    lines.push_back(footer);
 
     //generate output file
     ofstream output;

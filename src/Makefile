@@ -1,6 +1,6 @@
 ifdef ComSpec
 	PATHSEP2=\\
-	RM =del /s
+	RM =rm -rf
     EXT=.exe
 	config=configure_win
 else
@@ -12,30 +12,21 @@ endif
 
 CC=g++
 CFLAGS=-W -Wall -ansi -pedantic
-PATH_SRC=
+PATH_SRC=.
 PATH_DST=..$(PATHSEP2)bin$(PATHSEP2)
 LDFLAGS=
 EXEC=cavendish
 
-SRC=$(wildcard $(PATH_SRC)*.cpp)
-#OBJS=$(addprefix $(PATH_DST), $(SRC:.cpp=.o ))
-OBJS=$(SRC:.cpp=.o )
+SRC = $(wildcard *.cpp)
+OBJS = $(addprefix $(PATH_DST), $(SRC:.cpp=.o))
 
 all: $(PATH_DST)$(EXEC) clean launch
 
 $(PATH_DST)$(EXEC): $(OBJS)
-	$(CC) $(PATH_DST)$(OBJS) -o $@
+	$(CC) -o $@ $(OBJS)
 
-#$(OBJS): $(SRC)
-#	echo $(SRC)
-#	$(CC) $(CFLAGS) -c $< -o $(PATH_DST)$@
-
-configure_win:
-	@echo off
-	if not exist $(PATH_DST) md  $(PATH_DST)
-
-configure_linux:
-	mkdir -p $(PATH_DST)
+$(PATH_DST)%.o : $(PATH_SRC)%.cpp
+	$(CC) -o $@ -c $<
 
 launch:
 	$(PATH_DST)$(EXEC)$(EXT)
@@ -45,11 +36,3 @@ clean:
 
 mrproper: clean
 	$(RM) $(PATH_DST)$(EXEC)
-
-
-test: $(OBJS)
-	$(CC) -o $(PATH_DST)$@ $^
-
-%.o: %.cpp
-	$(CC) -o $@ -c $<
-
