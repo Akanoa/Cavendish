@@ -12,14 +12,15 @@ endif
 
 CC=g++
 CFLAGS=-W -Wall -ansi -pedantic
-PATH_SRC=
-PATH_DST=..$(PATHSEP2)bin$(PATHSEP2)
+PATH_SRC=src$(PATHSEP2)
+PATH_DST=bin$(PATHSEP2)
 LDFLAGS=
 EXEC=cavendish
 
 SRC=$(wildcard $(PATH_SRC)*.cpp)
 #OBJS=$(addprefix $(PATH_DST), $(SRC:.cpp=.o ))
-OBJS=$(SRC:.cpp=.o )
+#OBJS=$(SRC:.cpp=.o )
+OBJS = $(patsubst $(PATH_SRC)%,$(PATH_DST)%, $(SRC:.cpp=.o ))
 
 all: $(PATH_DST)$(EXEC) clean launch
 
@@ -50,6 +51,6 @@ mrproper: clean
 test: $(OBJS)
 	$(CC) -o $(PATH_DST)$@ $^
 
-%.o: %.cpp
+bin/%.o : src/%.cpp
 	$(CC) -o $@ -c $<
 

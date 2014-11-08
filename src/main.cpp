@@ -2,7 +2,10 @@
 #include <fstream>
 #include <vector>
 #include <stdlib.h>
+#ifdef _WIN32
 #include <direct.h>
+#endif
+#include <sys/stat.h>
 #include "vertice.h"
 #include "utils.h"
 
@@ -27,7 +30,7 @@ int main(int argc, char **argv)
     string src(src_), dst(dst_);
 
     //generate result dir
-    mkdir(dst.substr(0, dst.find_last_of(sep)-1).c_str());
+    mkdir(dst.substr(0, dst.find_last_of(sep)-1).c_str(), 0700);
 
     cout << getFileName(dst) << endl;
 
