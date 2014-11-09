@@ -11,7 +11,7 @@ else
 endif
 
 CC=g++
-CFLAGS=-W -Wall -ansi -pedantic
+CFLAGS=-W -Wall -ansi -pedantic -g
 PATH_SRC=.
 PATH_DST=..$(PATHSEP2)bin$(PATHSEP2)
 LDFLAGS=
@@ -20,13 +20,13 @@ EXEC=cavendish
 SRC = $(wildcard *.cpp)
 OBJS = $(addprefix $(PATH_DST), $(SRC:.cpp=.o))
 
-all: $(PATH_DST)$(EXEC) clean launch
+all: $(PATH_DST)$(EXEC) launch clean
 
 $(PATH_DST)$(EXEC): $(OBJS)
-	$(CC) -o $@ $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
 $(PATH_DST)%.o : $(PATH_SRC)%.cpp
-	$(CC) -o $@ -c $<
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 launch:
 	$(PATH_DST)$(EXEC)$(EXT)

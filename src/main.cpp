@@ -112,9 +112,7 @@ int main(int argc, char **argv)
 
     input.close();
 
-    cout << "new size: " << nodes->nb << endl;
-/*    cout << "first  node x: "<< getNode(nodes, 1)->x << endl;
-    cout << "second node x: "<< getNode(nodes, 2)->x << endl;*/
+    sortSegment(segments);
 
     //generate list of points
     struct Node *tmp;
@@ -133,15 +131,10 @@ int main(int argc, char **argv)
         nb_final_points++;
     }
 
-    struct Segment *tmp2;
-    popElement<struct Segment>(segments, 5);
-    for (int i=1; i <= segments->nb; i++)
+    for(struct Segment *seg = segments->first; seg; seg=seg->next)
     {
-        tmp2 = getElement<struct Segment>(segments, i);
-        cout << "segment: " << tmp2->id << endl << "\tnode 1: "<< tmp2->node1->id << endl << "\tnode 2: "<< tmp2->node2->id << endl << endl;
+        cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
     }
-
-    cout << float2scientific(tmp->x) << endl;
 
     //add not general inforamation
     string date, hour;

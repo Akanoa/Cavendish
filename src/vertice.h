@@ -51,7 +51,6 @@ void addElement(struct List<T> *list, T *element)
         element->id = list->nb;
         list->first = element;
     }
-
 }
 
 
@@ -77,24 +76,33 @@ template<typename T>
 void popElement(struct List<T> *list, int id)
 {
     T *element  = list->first;
-    T *previous = NULL;
+    T *previous = element;
 
+    //if list owns at least one element
     if(list->first)
     {
-        while(element->next)
+        if(list->first->id == id)
         {
-            if(element->id == id)
-                break;
-            previous = element;
-            element = element->next;
+            previous = list->first;
+            list->first = previous->next;
+            delete previous;
+            list->nb--;
         }
-    }
+        else
+        {
+            do
+            {
+                if(element->id == id)
+                {
+                    previous->next = element->next;
+                    delete element;
+                    list->nb--;
+                    break;
+                }
+                previous = element;
 
-    if(previous)
-    {
-        previous->next = element->next;
-        list->nb--;
-        delete element;
+            }while(element = element->next);
+        }
     }
 
 }
@@ -114,3 +122,6 @@ struct Node* initNode(float x, float y, int type);
 
 //segments stuff
 struct Segment* initSegment(Node *node1, Node *node2,int type);
+
+
+void sortSegment(struct List<struct Segment> *segments);
