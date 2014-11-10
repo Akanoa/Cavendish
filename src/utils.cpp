@@ -21,9 +21,9 @@ void currentDate(string &date, string &hour)
 
 }
 
-string getFileName(string &strPath)
+string getFileName(string &strPath, const char *sep)
 {
-	string filename = strPath.substr( strPath.find_last_of("\\") + 1 );
+	string filename = strPath.substr( strPath.find_last_of(sep) + 1 );
 	return filename.substr(0, filename.find_last_of("."));
 }
 

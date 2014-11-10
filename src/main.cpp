@@ -13,14 +13,12 @@
 enum {HEADER, NB_POINT, POINT, COURBE, SEGMENT, END};
 enum {LINUX, WINDOW};
 
-int os =
+const char *sep =
 #ifdef _WIN32
-    WINDOW;
+    "\\\\";
 #else
-    LINUX;
+    "/";
 #endif
-
-const char *sep = "\\\\";
 
 using namespace std;
 
@@ -33,13 +31,13 @@ int main(int argc, char **argv)
     string src(src_), dst(dst_);
 
     //generate result dir
-    #if WINDOW
-        mkdir(dst.substr(0, dst.find_last_of(sep)-1).c_str(), 0700);
-    #else
+    #ifdef _WIN32
         mkdir(dst.substr(0, dst.find_last_of(sep)-1).c_str());
+    #else
+        mkdir(dst.substr(0, dst.find_last_of(sep)).c_str(), 0700);
     #endif
 
-    cout << getFileName(dst) << endl;
+    cout << getFileName(dst, sep) << endl;
 
     if (argc > 1)
         src = argv[1];
@@ -57,6 +55,7 @@ int main(int argc, char **argv)
     vector<string> lines;
     vector<string> original_points;
     vector<string> generated_points;
+    vector<string> original_segments;
 
     int state = HEADER;
 
@@ -114,14 +113,14 @@ int main(int argc, char **argv)
 
     //generate list of points
     struct Node *tmp;
+    char line_tmp[100];
+    string str_tmp;
     for (int i=1; i <= nodes->nb; i++)
     {
         tmp = getElement<struct Node>(nodes, i);
         cout << "node: " << tmp->id << "\tx:"<< tmp->x << endl << "\ty:"<< tmp->y << endl;
-
-        char line_tmp[100];
         sprintf(line_tmp, "%4d  %s  %s%6d%6d", i, float2scientific(tmp->x, 10).c_str(), float2scientific(tmp->y, 10).c_str(), i, tmp->type);
-        string str_tmp(line_tmp);
+        str_tmp = line_tmp;
         generated_points.push_back(str_tmp);
         sprintf(line_tmp, "%d  %s  %s", i, float2scientific(tmp->x, 9).c_str(), float2scientific(tmp->y, 9).c_str());
         str_tmp = line_tmp;
@@ -129,9 +128,14 @@ int main(int argc, char **argv)
         nb_final_points++;
     }
 
+    int i=1;
     for(struct Segment *seg = segments->first; seg; seg=seg->next)
     {
         cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+        sprintf(line_tmp, "%3d%4d%4d", seg->node1->id, seg->node2->id, i);
+        str_tmp = line_tmp;
+        original_segments.push_back(str_tmp);
+        i++;
     }
 
     //add not general inforamation
@@ -145,7 +149,7 @@ int main(int argc, char **argv)
 
 
     lines.push_back("$nom du fichier");
-    lines.push_back(getFileName(dst)+".mai");
+    lines.push_back(getFileName(dst, sep)+".mai");
     lines.push_back("$date");
     lines.push_back(date);
     lines.push_back("$HEURE");
@@ -157,7 +161,7 @@ int main(int argc, char **argv)
     lines.insert(lines.end(), generated_points.begin(), generated_points.end());
     lines.push_back("####TODO####");
     lines.push_back("$limites de zones");
-    lines.push_back("####TODO####");
+    lines.insert(lines.end(), original_segments.begin(), original_segments.end());
     lines.push_back("$points a mailler");
     lines.insert(lines.end(), original_points.begin(), original_points.end());
     lines.push_back("0");

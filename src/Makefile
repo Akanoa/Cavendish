@@ -2,17 +2,15 @@ ifdef ComSpec
 	PATHSEP2=\\
 	RM =rm -rf
 	EXT=.exe
-	config=configure_win
 else
 	PATHSEP2=/
 	RM =rm -rf
-	config=configure_linux
 	EXT=
 endif
 
 CC=g++
 CFLAGS=-W -Wall -ansi -pedantic -g
-PATH_SRC=.
+PATH_SRC=
 PATH_DST=..$(PATHSEP2)bin$(PATHSEP2)
 LDFLAGS=
 EXEC=cavendish

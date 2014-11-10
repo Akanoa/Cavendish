@@ -9,7 +9,7 @@
 #define NB_DIGIT 11
 
 void currentDate(std::string &date, std::string &hour);
-std::string getFileName(std::string &strPath);
+std::string getFileName(std::string &strPath, const char* sep);
 
 template<typename T>
 std::string num2string(T x)
