@@ -1,3 +1,4 @@
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <iomanip>
@@ -22,3 +23,4 @@ std::string num2string(T x)
 
 
 std::string float2scientific(float d, int nb_digit=NB_DIGIT);
+std::istream & safegetline( std::istream & os, std::string & line );

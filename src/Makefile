@@ -1,13 +1,13 @@
 ifdef ComSpec
 	PATHSEP2=\\
 	RM =rm -rf
-    EXT=.exe
+	EXT=.exe
 	config=configure_win
 else
 	PATHSEP2=/
 	RM =rm -rf
 	config=configure_linux
-    EXT=
+	EXT=
 endif
 
 CC=g++
@@ -20,7 +20,7 @@ EXEC=cavendish
 SRC = $(wildcard *.cpp)
 OBJS = $(addprefix $(PATH_DST), $(SRC:.cpp=.o))
 
-all: $(PATH_DST)$(EXEC) launch clean
+all: $(PATH_DST)$(EXEC)
 
 $(PATH_DST)$(EXEC): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS)

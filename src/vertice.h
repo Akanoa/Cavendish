@@ -28,7 +28,6 @@ struct List
 };
 
 //templates stuff
-
 template<typename T>
 void addElement(struct List<T> *list, T *element)
 {
@@ -73,7 +72,7 @@ T* getElement(struct List<T> *list, int id)
 }
 
 template<typename T>
-void popElement(struct List<T> *list, int id)
+T* popElement(struct List<T> *list, int id)
 {
     T *element  = list->first;
     T *previous = element;
@@ -83,9 +82,8 @@ void popElement(struct List<T> *list, int id)
     {
         if(list->first->id == id)
         {
-            previous = list->first;
-            list->first = previous->next;
-            delete previous;
+            element = list->first;
+            list->first = element->next;
             list->nb--;
         }
         else
@@ -95,7 +93,6 @@ void popElement(struct List<T> *list, int id)
                 if(element->id == id)
                 {
                     previous->next = element->next;
-                    delete element;
                     list->nb--;
                     break;
                 }
@@ -104,6 +101,7 @@ void popElement(struct List<T> *list, int id)
             }while(element = element->next);
         }
     }
+    return element;
 
 }
 

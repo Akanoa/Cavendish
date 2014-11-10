@@ -69,7 +69,7 @@ int main(int argc, char **argv)
     //parsing
     while(!input.eof())
     {
-        getline(input, line);
+        safegetline(input, line);
 
         switch(state)
         {
@@ -111,8 +111,6 @@ int main(int argc, char **argv)
     }
 
     input.close();
-
-    sortSegment(segments);
 
     //generate list of points
     struct Node *tmp;
@@ -173,12 +171,14 @@ int main(int argc, char **argv)
     ofstream output;
     output.open(dst.c_str(), ofstream::out | ofstream::trunc);
 
-    cout<<endl<<endl<<"---------------"<<endl;
-
     for(unsigned int i=0; i< lines.size(); i++)
     {
         output<<lines.at(i)<<endl;
     }
+
+    cout<<endl<<"---------------"<<endl;
+    sortSegment(segments);
+    cout<<endl<<"---------------"<<endl;
 
     return 0;
 }
