@@ -1,17 +1,17 @@
 ifdef ComSpec
-	PATHSEP2=\\
+	PATH_SRC=.
+	PATH_DST=..\\bin\\
 	RM =rm -rf
 	EXT=.exe
 else
-	PATHSEP2=/
+	PATH_SRC=
+	PATH_DST=../bin/
 	RM =rm -rf
 	EXT=
 endif
 
 CC=g++
 CFLAGS=-W -Wall -ansi -pedantic -g
-PATH_SRC=
-PATH_DST=..$(PATHSEP2)bin$(PATHSEP2)
 LDFLAGS=
 EXEC=cavendish
 
