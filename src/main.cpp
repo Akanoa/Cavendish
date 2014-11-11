@@ -37,7 +37,7 @@ int main(int argc, char **argv)
         mkdir(dst.substr(0, dst.find_last_of(sep)).c_str(), 0700);
     #endif
 
-    cout << getFileName(dst, sep) << endl;
+    cout << "file: " << getFileName(dst, sep) << endl;
 
     if (argc > 1)
         src = argv[1];
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
     for (int i=1; i <= nodes->nb; i++)
     {
         tmp = getElement<struct Node>(nodes, i);
-        cout << "node: " << tmp->id << "\tx:"<< tmp->x << endl << "\ty:"<< tmp->y << endl;
+        //cout << "node: " << tmp->id << "\tx:"<< tmp->x << endl << "\ty:"<< tmp->y << endl;
         sprintf(line_tmp, "%4d  %s  %s%6d%6d", i, float2scientific(tmp->x, 10).c_str(), float2scientific(tmp->y, 10).c_str(), i, tmp->type);
         str_tmp = line_tmp;
         generated_points.push_back(str_tmp);
@@ -131,7 +131,7 @@ int main(int argc, char **argv)
     int i=1;
     for(struct Segment *seg = segments->first; seg; seg=seg->next)
     {
-        cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+        //cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
         sprintf(line_tmp, "%3d%4d%4d", seg->node1->id, seg->node2->id, i);
         str_tmp = line_tmp;
         original_segments.push_back(str_tmp);
