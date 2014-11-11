@@ -98,7 +98,7 @@ T* popElement(struct List<T> *list, int id)
                 }
                 previous = element;
 
-            }while(element = element->next);
+            }while((element = element->next));
         }
     }
     return element;

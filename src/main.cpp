@@ -132,11 +132,13 @@ int main(int argc, char **argv)
     for(struct Segment *seg = segments->first; seg; seg=seg->next)
     {
         //cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
-        sprintf(line_tmp, "%3d%4d%4d", seg->node1->id, seg->node2->id, i);
+        sprintf(line_tmp, "%3d%4d%4d", i, seg->node1->id, seg->node2->id);
         str_tmp = line_tmp;
         original_segments.push_back(str_tmp);
         i++;
     }
+
+    sortSegment(segments);
 
     //add not general inforamation
     string date, hour;
@@ -179,10 +181,6 @@ int main(int argc, char **argv)
     {
         output<<lines.at(i)<<endl;
     }
-
-    cout<<endl<<"---------------"<<endl;
-    sortSegment(segments);
-    cout<<endl<<"---------------"<<endl;
 
     return 0;
 }
