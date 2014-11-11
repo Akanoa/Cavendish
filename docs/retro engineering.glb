@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<MAIN>
+<GEODOCMANAGER aligngrille="false" angle="1" colgrille="-3618616" comauto="false" commentaires="" debx="-0.2781012879273962" deby="-0.06267240025561777" desgrille="1" eq="0" finx="1.2519272114277848" finy="0.6893964028117958" gradx="1.0" grady="1.0" grilx="1.0" grily="1.0" rapport="1.0" visaxe="true" visgrad="true" visgrille="true" visnb="false"/>
+<GEOVECTOR>
+<AXE fictif="false" nom="(Ox)" vertical="false">
+<GEOASPECTLIGNE couleur="-65536" dash="0" epaisseur="0" istrace="false" visible="true"/>
+</AXE>
+<AXE fictif="false" nom="(Oy)" vertical="true">
+<GEOASPECTLIGNE couleur="-65536" dash="0" epaisseur="0" istrace="false" visible="true"/>
+</AXE>
+<POINTINTERDROITE d1="(Ox)" d2="(Oy)" fictif="false" nom="o">
+<GEOASPECTPOINT affichenom="true" couleur="-65536" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="1" taille="12" visible="false"/>
+</POINTINTERDROITE>
+<POINTREPERE expr1="0.05" expr2="0.55" fictif="false" nom="1" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<POINTREPERE expr1="0.5" expr2="0.55" fictif="false" nom="2" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<POINTREPERE expr1="0.95" expr2="0.05" fictif="false" nom="3" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<POINTREPERE expr1="0.05" expr2="0.05" fictif="false" nom="4" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="13" decy="-163" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<POINTREPERE expr1="0.5" expr2="0.3" fictif="false" nom="5" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<POINTREPERE expr1="0.95" expr2="0.3" fictif="false" nom="6" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<POINTREPERE expr1="0.5" expr2="0.425" fictif="false" nom="22" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-65281" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<POINTREPERE expr1="0.95" expr2="0.175" fictif="false" nom="23" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-16711936" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<POINTREPERE expr1="0.1625" expr2="0.55" fictif="false" nom="7" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-13421569" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<OBSERVDISTANCE apres0="" avant0="17=" ispdependent="false" nbapres="1" nbavant="1" nom="T1" p1="1" p2="7" x="0.09350335087436312" y="0.5823618392955485">
+<GEOASPECTOBSERV couleur="-13421569" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="false"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="323=" ispdependent="false" nbapres="1" nbavant="1" nom="T2" p1="3" p2="23" x="0.9127741689966526" y="0.1343062003224602">
+<GEOASPECTOBSERV couleur="-16711936" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="522=" ispdependent="false" nbapres="1" nbavant="1" nom="T3" p1="5" p2="22" x="0.5318186498697756" y="0.3713211397792388">
+<GEOASPECTOBSERV couleur="-65281" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="false"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="222=" ispdependent="false" nbapres="1" nbavant="1" nom="T4" p1="22" p2="2" x="0.5339831698648146" y="0.47413583954359484">
+<GEOASPECTOBSERV couleur="-65281" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="false"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="25=" ispdependent="false" nbapres="1" nbavant="1" nom="T5" p1="2" p2="5" x="0.42575717011286096" y="0.43625673963041106">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="false"/>
+</OBSERVDISTANCE>
+<POINTREPERE expr1="0.275" expr2="0.55" fictif="false" nom="8" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-13421569" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<OBSERVDISTANCE apres0="" avant0="78=" ispdependent="false" nbapres="1" nbavant="1" nom="T6" p1="7" p2="8" x="0.19740031063623875" y="0.585608619288107">
+<GEOASPECTOBSERV couleur="-13421569" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="false"/>
+</OBSERVDISTANCE>
+<POINTREPERE expr1="0.3875" expr2="0.55" fictif="false" nom="9" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-13421569" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<OBSERVDISTANCE apres0="" avant0="89=" ispdependent="false" nbapres="1" nbavant="1" nom="T7" p1="8" p2="9" x="0.3045440503906728" y="0.5823618392955486">
+<GEOASPECTOBSERV couleur="-13421569" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="false"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="92=" ispdependent="false" nbapres="1" nbavant="1" nom="T8" p1="9" p2="2" x="0.4268394301103805" y="0.5877731392831462">
+<GEOASPECTOBSERV couleur="-13421569" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="false"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="12=" ispdependent="false" nbapres="1" nbavant="1" nom="T9" p1="1" p2="2" x="0.2623359104874109" y="0.5271665794220521">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="false"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="43=" ispdependent="false" nbapres="1" nbavant="1" nom="T10" p1="4" p2="3" x="0.4233549077577111" y="0.028436333811008074">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<POINTREPERE expr1="0.82142857143" expr2="0.05" fictif="false" nom="10" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-65536" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<POINTREPERE expr1="0.69285714286" expr2="0.05" fictif="false" nom="11" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-65536" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<OBSERVDISTANCE apres0="" avant0="310=" ispdependent="false" nbapres="1" nbavant="1" nom="T11" p1="3" p2="10" x="0.8462682191644098" y="0.036072997993910616">
+<GEOASPECTOBSERV couleur="-65536" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="1011=" ispdependent="false" nbapres="1" nbavant="1" nom="T12" p1="10" p2="11" x="0.7052016865993771" y="0.03610178309012502">
+<GEOASPECTOBSERV couleur="-65536" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<POINTREPERE expr1="0.56428571429" expr2="0.05" fictif="false" nom="12" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-65536" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<OBSERVCOORD apres0="" avant0="1" ispdependent="false" nbapres="1" nbavant="1" nom="T13" p1="1" x="0.05633901214116538" y="0.5338932447863802">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVCOORD>
+<OBSERVCOORD apres0="" avant0="7" ispdependent="false" nbapres="1" nbavant="1" nom="T14" p1="7" x="0.15020155593734574" y="0.626430532183792">
+<GEOASPECTOBSERV couleur="-16776961" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVCOORD>
+<OBSERVDISTANCE apres0="" avant0="12=" ispdependent="false" nbapres="1" nbavant="1" nom="T15" p1="1" p2="2" x="0.2491984740523907" y="0.5238172813749936">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="17=" ispdependent="false" nbapres="1" nbavant="1" nom="T16" p1="1" p2="7" x="0.07172433371143672" y="0.5878375053897004">
+<GEOASPECTOBSERV couleur="-16776961" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="78=" ispdependent="false" nbapres="1" nbavant="1" nom="T17" p1="7" p2="8" x="0.1814679866246126" y="0.5903520458959661">
+<GEOASPECTOBSERV couleur="-16776961" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="89=" ispdependent="false" nbapres="1" nbavant="1" nom="T18" p1="8" p2="9" x="0.2968126374300406" y="0.5883041289630877">
+<GEOASPECTOBSERV couleur="-16776961" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="92=" ispdependent="false" nbapres="1" nbavant="1" nom="T19" p1="9" p2="2" x="0.4065562903432165" y="0.5870614406966231">
+<GEOASPECTOBSERV couleur="-16776961" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="12=" ispdependent="false" nbapres="1" nbavant="1" nom="T20" p1="1" p2="2" x="0.3289653499044234" y="0.48884058727465535">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="false"/>
+</OBSERVDISTANCE>
+<OBSERVCOORD apres0="" avant0="2" ispdependent="false" nbapres="1" nbavant="1" nom="T21" p1="2" x="0.5588494228488655" y="0.5523763863296519">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVCOORD>
+<OBSERVDISTANCE apres0="" avant0="52=" ispdependent="false" nbapres="1" nbavant="1" nom="T22" p1="5" p2="2" x="0.4086155698631092" y="0.4404389966169139">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="222=" ispdependent="false" nbapres="1" nbavant="1" nom="T23" p1="2" p2="22" x="0.5188955368833604" y="0.4992956823394191">
+<GEOASPECTOBSERV couleur="-65281" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<OBSERVDISTANCE apres0="" avant0="225=" ispdependent="false" nbapres="1" nbavant="1" nom="T24" p1="22" p2="5" x="0.5310372186139479" y="0.37465113281568185">
+<GEOASPECTOBSERV couleur="-65281" font="Dialog" istrace="false" precision="8" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<POINTREPERE expr1="0.43571428571" expr2="0.05" fictif="false" nom="13" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-52429" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<POINTREPERE expr1="3.0714285714E-01" expr2="0.05" fictif="false" nom="14" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-52429" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<POINTREPERE expr1="1.7857142857E-01" expr2="0.05" fictif="false" nom="15" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-52429" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<POINTREPERE expr1="0.05" expr2="0.05" fictif="false" nom="16" type="0">
+<GEOASPECTPOINT affichenom="true" couleur="-52429" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+</GEOVECTOR>
+</MAIN>

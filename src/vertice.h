@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 enum type {ORIGINAL, GENERATED};
 
@@ -16,6 +17,7 @@ struct Segment
     Node *node1;
     Node *node2;
     int id;
+    int zone;
     int type;
     struct Segment *next;
 };
@@ -120,6 +122,6 @@ struct Node* initNode(float x, float y, int type);
 
 //segments stuff
 struct Segment* initSegment(Node *node1, Node *node2,int type);
-
-
+float getDistance(struct Segment *segment);
+float getDistance(struct Node *node1, struct Node *node2);
 void sortSegment(struct List<struct Segment> *segments);

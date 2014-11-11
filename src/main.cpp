@@ -131,7 +131,7 @@ int main(int argc, char **argv)
     int i=1;
     for(struct Segment *seg = segments->first; seg; seg=seg->next)
     {
-        //cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+        seg->zone = i;
         sprintf(line_tmp, "%3d%4d%4d", i, seg->node1->id, seg->node2->id);
         str_tmp = line_tmp;
         original_segments.push_back(str_tmp);
@@ -143,6 +143,8 @@ int main(int argc, char **argv)
     //add not general inforamation
     string date, hour;
     currentDate(date, hour);
+
+    lines[1] = "   RDM - Eléments finis";
 
     //remove file name informations
     lines.erase(lines.end()-4, lines.end());
@@ -181,6 +183,11 @@ int main(int argc, char **argv)
     {
         output<<lines.at(i)<<endl;
     }
+
+    struct Node *node1 = initNode(0,0,0);
+    struct Node *node2 = initNode(1,1,0);
+
+    cout << "sqrt(2)" << getDistance(segments->first);
 
     return 0;
 }
