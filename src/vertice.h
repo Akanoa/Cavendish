@@ -30,6 +30,18 @@ struct List
 };
 
 //templates stuff
+
+
+template<typename T>
+struct List<T>* initList()
+{
+    struct List<T> *list = new List<T>;
+    list->nb= 0;
+    list->first = NULL;
+
+    return list;
+}
+
 template<typename T>
 void addElement(struct List<T> *list, T *element)
 {
@@ -108,14 +120,25 @@ T* popElement(struct List<T> *list, int id)
 }
 
 template<typename T>
-struct List<T>* initList()
+void reverse(struct List<T> *list)
 {
-    struct List<T> *list = new List<T>;
-    list->nb= 0;
-    list->first = NULL;
+    struct List<T> *computed = initList<T>();
+    T *element = NULL, *inserted = NULL;
 
-    return list;
+    while(list->nb)
+    {
+        element = list->first;
+        while(element->next)
+            element = element->next;
+        inserted = popElement(list, element->id);
+        addElement(computed, inserted);
+        inserted->next = NULL;
+    }
+
+    *list = *computed;
+    delete computed;
 }
+
 
 //nodes stuff
 struct Node* initNode(float x, float y, int type);
@@ -124,4 +147,9 @@ struct Node* initNode(float x, float y, int type);
 struct Segment* initSegment(Node *node1, Node *node2,int type);
 float getDistance(struct Segment *segment);
 float getDistance(struct Node *node1, struct Node *node2);
+float getPerimeter(struct List<struct Segment> *segments);
+void subdiviseOutline(struct List<struct Segment> *segments, int n);
+struct List<struct Segment> * subdivise(struct Segment *segment, float perimiter, int n);
 void sortSegment(struct List<struct Segment> *segments);
+bool travelingDirection(struct Segment *seg1, struct Segment *seg2);
+

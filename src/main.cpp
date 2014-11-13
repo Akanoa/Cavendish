@@ -25,6 +25,7 @@ using namespace std;
 int main(int argc, char **argv)
 {
     char src_[100], dst_[100];
+    int nb_points_wanted = 20;
     sprintf(src_, "..%s%s%s%s", sep, "docs", sep, "MPmaille.geo");
     sprintf(dst_, "..%s%s%s%s", sep, "results", sep, "maillage.mai");
 
@@ -184,10 +185,12 @@ int main(int argc, char **argv)
         output<<lines.at(i)<<endl;
     }
 
-    struct Node *node1 = initNode(0,0,0);
-    struct Node *node2 = initNode(1,1,0);
+    struct Segment *seg1 = initSegment(initNode(1,1,ORIGINAL), initNode(2,1,ORIGINAL), ORIGINAL);
+    struct Segment *seg2 = initSegment(initNode(2,1,ORIGINAL), initNode(1,2,ORIGINAL), ORIGINAL);
 
-    cout << "sqrt(2)" << getDistance(segments->first);
-
+    if(travelingDirection(seg1, seg2))
+        cout << "CW" << endl;
+    else
+        cout << "CCW" << endl;
     return 0;
 }

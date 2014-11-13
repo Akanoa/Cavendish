@@ -35,6 +35,8 @@ void sortSegment(struct List<struct Segment> *segments)
     struct Segment *inserted = NULL;
     struct Node *swap = NULL; 
     struct Segment *last_computed = segments->first;
+    struct Segment *seg1 = NULL, *seg2 = NULL;
+
     addElement(computed, element);
     popElement(segments, element->id);
     element->next = NULL;
@@ -69,6 +71,25 @@ void sortSegment(struct List<struct Segment> *segments)
     *segments = *computed;
     delete computed;
 
+    seg1 = segments->first;
+    seg2 = segments->first->next;
+
+    if((seg1->node2->x - seg1->node1->x)*(seg2->node2->y - seg2->node1->y) - (seg2->node2->x - seg2->node1->x)*(seg1->node2->y - seg1->node1->y))
+
+    reverse(segments);
+
+    for(struct Segment *seg = segments->first; seg; seg=seg->next)
+    {
+        cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+    }
+
+}
+
+bool travelingDirection(struct Segment *seg1, struct Segment *seg2)
+{
+    if(((seg1->node2->x - seg1->node1->x)*(seg2->node2->y - seg2->node1->y) - (seg2->node2->x - seg2->node1->x)*(seg1->node2->y - seg1->node1->y))==1)
+        return true;
+    return false;
 }
 
 
@@ -80,4 +101,36 @@ float getDistance(struct Segment *segment)
 float getDistance(struct Node *node1, struct Node *node2)
 {
     return sqrt((node1->x - node2->x)*(node1->x - node2->x)+(node1->y - node2->y)*(node1->y - node2->y));
+}
+
+float getPerimeter(struct List<struct Segment> *segments)
+{
+    struct Segment *segment = segments->first;
+    float res = 0.0;
+    do
+    {
+        res += getDistance(segment);
+    }while((segment = segment->next));
+
+    return res;
+}
+
+void subdiviseOutline(struct List<struct Segment> *segments, int n)
+{
+    struct List<struct Segment> *computed = initList<struct Segment>();
+    int nb_points = n - segments->nb;
+    struct Segment *segment = segments->first;
+    float perimeter = getPerimeter(segments);
+
+    do
+    {
+        subdivise(segment, perimeter, nb_points);
+    }while((segment = segment->next));
+}
+
+struct List<struct Segment> * subdivise(struct Segment *segment, float perimiter, int n)
+{
+    struct List<struct Segment> *computed = initList<struct Segment>();
+
+    return computed;
 }
