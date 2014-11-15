@@ -60,7 +60,7 @@ string float2scientific(float d, int nb_digit)
 
 	param = x;
 	fractpart = modf (param , &intpart);
-	ostringstream ss;
+	std::stringstream ss;
 	ss <<fractpart;
 	string s(ss.str());
 

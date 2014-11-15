@@ -25,7 +25,7 @@ using namespace std;
 int main(int argc, char **argv)
 {
     char src_[100], dst_[100];
-    int nb_points_wanted = 20;
+    int nb_points_wanted = 30;
     sprintf(src_, "..%s%s%s%s", sep, "docs", sep, "MPmaille.geo");
     sprintf(dst_, "..%s%s%s%s", sep, "results", sep, "maillage.mai");
 
@@ -46,6 +46,9 @@ int main(int argc, char **argv)
     if (argc > 2)
         dst = argv[2];
 
+    if(argc > 3)
+        nb_points_wanted = atoi(argv[3]);
+
     // variables declaration
     ifstream input(src.c_str(), ifstream::in);
 
@@ -55,6 +58,7 @@ int main(int argc, char **argv)
     string line;
     vector<string> lines;
     vector<string> original_points;
+    vector<string> points;
     vector<string> generated_points;
     vector<string> original_segments;
 
@@ -112,24 +116,43 @@ int main(int argc, char **argv)
 
     input.close();
 
-    //generate list of points
     struct Node *tmp;
-    char line_tmp[100];
+    char line_tmp[200];
     string str_tmp;
-    for (int i=1; i <= nodes->nb; i++)
+    int i=1;
+    for(struct Node *node = nodes->first; node; node=node->next)
     {
-        tmp = getElement<struct Node>(nodes, i);
-        //cout << "node: " << tmp->id << "\tx:"<< tmp->x << endl << "\ty:"<< tmp->y << endl;
+        sprintf(line_tmp, "%d  %s  %s", i, float2scientific(node->x, 9).c_str(), float2scientific(node->y, 9).c_str());
+        str_tmp = line_tmp;
+        original_points.push_back(str_tmp);
+        i++;
+    }
+
+
+    sortSegment(segments);
+
+/*    tmp= nodes->first;
+    do
+    {
+        cout << "node: " << tmp->id << endl << "\tx:"<< tmp->x << endl << "\ty:"<< tmp->y << endl;
+    }while((tmp = tmp->next));*/
+
+    subdiviseOutline(segments, nodes, nb_points_wanted);
+
+
+    //generate list of points
+    i=1;
+    tmp = nodes->first;
+    do
+    {
         sprintf(line_tmp, "%4d  %s  %s%6d%6d", i, float2scientific(tmp->x, 10).c_str(), float2scientific(tmp->y, 10).c_str(), i, tmp->type);
         str_tmp = line_tmp;
         generated_points.push_back(str_tmp);
-        sprintf(line_tmp, "%d  %s  %s", i, float2scientific(tmp->x, 9).c_str(), float2scientific(tmp->y, 9).c_str());
-        str_tmp = line_tmp;
-        original_points.push_back(str_tmp);
         nb_final_points++;
-    }
+        i++;
+    }while((tmp = tmp->next));
 
-    int i=1;
+    i=1;
     for(struct Segment *seg = segments->first; seg; seg=seg->next)
     {
         seg->zone = i;
@@ -139,7 +162,6 @@ int main(int argc, char **argv)
         i++;
     }
 
-    sortSegment(segments);
 
     //add not general inforamation
     string date, hour;
@@ -164,7 +186,6 @@ int main(int argc, char **argv)
     lines.push_back("$NOEUDS");
     lines.push_back(num2string(nb_final_points));
     lines.insert(lines.end(), generated_points.begin(), generated_points.end());
-    lines.push_back("####TODO####");
     lines.push_back("$limites de zones");
     lines.insert(lines.end(), original_segments.begin(), original_segments.end());
     lines.push_back("$points a mailler");
@@ -185,12 +206,5 @@ int main(int argc, char **argv)
         output<<lines.at(i)<<endl;
     }
 
-    struct Segment *seg1 = initSegment(initNode(1,1,ORIGINAL), initNode(2,1,ORIGINAL), ORIGINAL);
-    struct Segment *seg2 = initSegment(initNode(2,1,ORIGINAL), initNode(1,2,ORIGINAL), ORIGINAL);
-
-    if(travelingDirection(seg1, seg2))
-        cout << "CW" << endl;
-    else
-        cout << "CCW" << endl;
     return 0;
 }

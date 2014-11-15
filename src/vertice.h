@@ -43,26 +43,24 @@ struct List<T>* initList()
 }
 
 template<typename T>
-void addElement(struct List<T> *list, T *element)
+void addElement(struct List<T> *list, T *element_)
 {
     //find last node from nodes
-    T *element_ = list->first;
+    T *element = list->first;
 
-    if(list->first)
+    list->nb++;
+    element_->id = list->nb;
+
+    if(element)
     {
-        while(element_->next)
-            element_ = element_->next;
+        while(element->next)
+            element = element->next;
 
-        list->nb++;
-        element->id = list->nb;
-        element_->next = element;
+        element->next = element_;
     }
-    //This is the first element of list
     else
     {
-        list->nb++;
-        element->id = list->nb;
-        list->first = element;
+        list->first = element_;
     }
 }
 
@@ -88,33 +86,27 @@ T* getElement(struct List<T> *list, int id)
 template<typename T>
 T* popElement(struct List<T> *list, int id)
 {
-    T *element  = list->first;
-    T *previous = element;
-
-    //if list owns at least one element
-    if(list->first)
+    T *element = NULL;
+    T *previous = list->first;
+    for(element = list->first; element; element = element->next)
     {
-        if(list->first->id == id)
+        if(element->id == id)
         {
-            element = list->first;
-            list->first = element->next;
-            list->nb--;
-        }
-        else
-        {
-            do
-            {
-                if(element->id == id)
-                {
-                    previous->next = element->next;
-                    list->nb--;
-                    break;
-                }
-                previous = element;
+            if(element == list->first)
+                list->first = element->next;
 
-            }while((element = element->next));
+            else
+                previous->next = element->next;
+
+            list->nb--;
+
+            break;
         }
+
+        previous = element;
     }
+
+    element->next = NULL;
     return element;
 
 }
@@ -132,7 +124,6 @@ void reverse(struct List<T> *list)
             element = element->next;
         inserted = popElement(list, element->id);
         addElement(computed, inserted);
-        inserted->next = NULL;
     }
 
     *list = *computed;
@@ -148,8 +139,8 @@ struct Segment* initSegment(Node *node1, Node *node2,int type);
 float getDistance(struct Segment *segment);
 float getDistance(struct Node *node1, struct Node *node2);
 float getPerimeter(struct List<struct Segment> *segments);
-void subdiviseOutline(struct List<struct Segment> *segments, int n);
-struct List<struct Segment> * subdivise(struct Segment *segment, float perimiter, int n);
+void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct Node> *nodes, int n);
+void subdivise(struct List<struct Segment> *computed, struct Segment *segment, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments);
 void sortSegment(struct List<struct Segment> *segments);
 bool travelingDirection(struct Segment *seg1, struct Segment *seg2);
-
+struct Node* generateNewPointOnSegment(struct Segment *segment, float length, float distance);

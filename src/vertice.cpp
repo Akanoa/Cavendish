@@ -1,4 +1,5 @@
 #include "vertice.h"
+#include <cstdlib>
 
 using namespace std;
 
@@ -31,15 +32,14 @@ void sortSegment(struct List<struct Segment> *segments)
     //get how many segments must be sorted
     int left_segments = segments->nb-1;
     struct List<struct Segment> *computed = initList<struct Segment>();
-    struct Segment *element = getElement(segments, segments->first->id);
+    struct Segment *element = NULL;
     struct Segment *inserted = NULL;
     struct Node *swap = NULL; 
     struct Segment *last_computed = segments->first;
     struct Segment *seg1 = NULL, *seg2 = NULL;
 
-    addElement(computed, element);
-    popElement(segments, element->id);
-    element->next = NULL;
+    inserted = popElement(segments, segments->first->id);
+    addElement(computed, inserted);
 
     while(left_segments)
     {
@@ -71,23 +71,55 @@ void sortSegment(struct List<struct Segment> *segments)
     *segments = *computed;
     delete computed;
 
+    for(struct Segment *seg = segments->first; seg; seg=seg->next)
+    {
+        cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+    }
+
     seg1 = segments->first;
     seg2 = segments->first->next;
 
-    if((seg1->node2->x - seg1->node1->x)*(seg2->node2->y - seg2->node1->y) - (seg2->node2->x - seg2->node1->x)*(seg1->node2->y - seg1->node1->y))
+    if(travelingDirection(seg1, seg2))
+        cout << "CW" << endl;
+    else
+        cout << "CCW" << endl;
 
-    reverse(segments);
+
+    if(!travelingDirection(seg1, seg2))
+    {
+        reverse(segments);
+
+        element = segments->first;
+        do
+        {
+            swap = element->node2;
+            element->node2 = element->node1;
+            element->node1 = swap;
+        }while((element = element->next));
+    }
+
+
+    cout << endl << "----------------------" << endl << endl;
 
     for(struct Segment *seg = segments->first; seg; seg=seg->next)
     {
         cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
     }
 
+    seg1 = segments->first;
+    seg2 = segments->first->next;
+
+    if(travelingDirection(seg1, seg2))
+        cout << "CW" << endl;
+    else
+        cout << "CCW" << endl;
+
 }
 
 bool travelingDirection(struct Segment *seg1, struct Segment *seg2)
 {
-    if(((seg1->node2->x - seg1->node1->x)*(seg2->node2->y - seg2->node1->y) - (seg2->node2->x - seg2->node1->x)*(seg1->node2->y - seg1->node1->y))==1)
+    float res = (seg1->node2->x - seg1->node1->x)*(seg2->node2->y - seg2->node1->y) - (seg2->node2->x - seg2->node1->x)*(seg1->node2->y - seg1->node1->y);
+    if(res>0)
         return true;
     return false;
 }
@@ -115,22 +147,42 @@ float getPerimeter(struct List<struct Segment> *segments)
     return res;
 }
 
-void subdiviseOutline(struct List<struct Segment> *segments, int n)
+struct Node* generateNewPointOnSegment(struct Segment *segment, float length, float distance)
+{
+    float x = segment->node1->x*(length-distance)/length + segment->node2->x*distance/length;
+    float y = segment->node1->y*(length-distance)/length + segment->node2->y*distance/length;
+
+    return initNode(x, y, segment->id);
+}
+
+void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct Node> *nodes, int n)
 {
     struct List<struct Segment> *computed = initList<struct Segment>();
     int nb_points = n - segments->nb;
     struct Segment *segment = segments->first;
     float perimeter = getPerimeter(segments);
 
+    cout << "Delta: " << perimeter/nb_points << endl;
+
     do
     {
-        subdivise(segment, perimeter, nb_points);
+        subdivise(computed, segment, perimeter, nb_points, nodes, segments);
     }while((segment = segment->next));
 }
 
-struct List<struct Segment> * subdivise(struct Segment *segment, float perimiter, int n)
+void subdivise(struct List<struct Segment> *computed, struct Segment *segment, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments)
 {
-    struct List<struct Segment> *computed = initList<struct Segment>();
+    float L = getDistance(segment);
+    int n_segs = (int)round(L*n/perimiter);
+    float delta = L/n_segs;
+    struct Node *node = NULL;
+    cout << "id: " << segment->id << " => ni: " << n_segs-1 << " => delta: " << delta << " => L: " << L << endl;
+    for(int i=0; i<n_segs-1; i++)
+    {
+        node = generateNewPointOnSegment(segment, L, delta*(i+1));
+        cout << "new point generated:" << endl << "\tx: "<< node->x << "\ty: " << node->y << endl << endl;
+        addElement(nodes, node);
+    }
 
-    return computed;
+    cout << "------------------------" << endl << endl;
 }
