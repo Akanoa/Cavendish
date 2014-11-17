@@ -27,6 +27,11 @@ struct Segment* initSegment(Node *node1, Node *node2, int type)
     return segment;
 }
 
+float getAngle(struct Segment* segment1, struct Segment* segment2)
+{
+    return atan2(segment2->node2->y - segment2->node1->y, segment2->node2->x - segment2->node1->x) - atan2(segment1->node2->y - segment1->node1->y, segment1->node2->x - segment1->node1->x);
+}
+
 void sortSegment(struct List<struct Segment> *segments)
 {
     //get how many segments must be sorted
@@ -119,7 +124,9 @@ void sortSegment(struct List<struct Segment> *segments)
 bool travelingDirection(struct Segment *seg1, struct Segment *seg2)
 {
     float res = (seg1->node2->x - seg1->node1->x)*(seg2->node2->y - seg2->node1->y) - (seg2->node2->x - seg2->node1->x)*(seg1->node2->y - seg1->node1->y);
-    if(res>0)
+    if(getAngle(seg1, seg2)*180/PI >= 0)
+        res = -res;
+    if(res >= 0)
         return true;
     return false;
 }

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cmath>
 
+#define PI 3.14159265
+
 enum type {ORIGINAL, GENERATED};
 
 struct Node
@@ -164,3 +166,4 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
 void sortSegment(struct List<struct Segment> *segments);
 bool travelingDirection(struct Segment *seg1, struct Segment *seg2);
 struct Node* generateNewPointOnSegment(struct Segment *segment, float length, float distance);
+float getAngle(struct Segment* segment1, struct Segment* segment2);

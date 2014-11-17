@@ -142,6 +142,13 @@ int main(int argc, char **argv)
 
     sortSegment(segments);
 
+    cout << endl << "*****************" << endl << endl;
+
+    for(struct Segment *seg = segments->first; seg->next; seg=seg->next)
+    {
+        cout << "segment: " << seg->id << endl << "\tangle: " << getAngle(seg, seg->next)*180/PI << endl << endl;
+    }
+
 /*    tmp= nodes->first;
     do
     {
@@ -150,12 +157,12 @@ int main(int argc, char **argv)
 
     subdiviseOutline(segments, nodes, nb_points_wanted);
 
-    cout << endl << "*****************" << endl << endl;
+    // cout << endl << "*****************" << endl << endl;
 
-    for(struct Segment *seg = segments->first; seg; seg=seg->next)
-    {
-        cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
-    }
+    // for(struct Segment *seg = segments->first; seg; seg=seg->next)
+    // {
+    //     cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+    // }
 
 
     //generate list of points
