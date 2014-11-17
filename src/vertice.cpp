@@ -157,32 +157,64 @@ struct Node* generateNewPointOnSegment(struct Segment *segment, float length, fl
 
 void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct Node> *nodes, int n)
 {
-    struct List<struct Segment> *computed = initList<struct Segment>();
     int nb_points = n - segments->nb;
     struct Segment *segment = segments->first;
     float perimeter = getPerimeter(segments);
+
+    struct Segment *last_inserted = segments->first;
 
     cout << "Delta: " << perimeter/nb_points << endl;
 
     do
     {
-        subdivise(computed, segment, perimeter, nb_points, nodes, segments);
-    }while((segment = segment->next));
+        subdivise(segment, perimeter, nb_points, nodes, segments, last_inserted);
+
+        segment = NULL;
+        if(last_inserted->next)
+            segment = last_inserted->next;
+    }while(segment->next);
+
+    cout << endl << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl << endl;
+
+    for(struct Segment *seg = segments->first; seg; seg=seg->next)
+    {
+        cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+    }
 }
 
-void subdivise(struct List<struct Segment> *computed, struct Segment *segment, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments)
+void subdivise(struct Segment *segment_, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments, struct Segment *last_inserted)
 {
-    float L = getDistance(segment);
+    float L = getDistance(segment_);
     int n_segs = (int)round(L*n/perimiter);
     float delta = L/n_segs;
     struct Node *node = NULL;
-    cout << "id: " << segment->id << " => ni: " << n_segs-1 << " => delta: " << delta << " => L: " << L << endl;
+
+    struct Node *start = segment_->node1;
+    struct Segment *segment = NULL;
+    struct Segment *previous = segments->first;
+
+    //cout << "id: " << segment_->id << " => ni: " << n_segs-1 << " => delta: " << delta << " => L: " << L << endl;
     for(int i=0; i<n_segs-1; i++)
     {
-        node = generateNewPointOnSegment(segment, L, delta*(i+1));
-        cout << "new point generated:" << endl << "\tx: "<< node->x << "\ty: " << node->y << endl << endl;
+        node = generateNewPointOnSegment(segment_, L, delta*(i+1));
+        //cout << "new point generated:" << endl << "\tx: "<< node->x << "\ty: " << node->y << endl << endl;
         addElement(nodes, node);
+
+        segment = initSegment(start, node, ORIGINAL);
+        cout << "segment: " << segment->id << endl << "\tnode 1: "<< segment->node1->id << endl << "\tnode 2: "<< segment->node2->id << endl << endl;
+        insertElement(segments, segment, previous->id);
+
+        start = segment->node2;
+        previous = segment;
+
     }
+
+        segment = initSegment(node, segment_->node2, ORIGINAL);
+        insertElement(segments, segment, previous->id);
+
+    last_inserted = segment;
+
+    delete popElement(segments, segment_->id);
 
     cout << "------------------------" << endl << endl;
 }

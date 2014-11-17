@@ -98,15 +98,17 @@ T* popElement(struct List<T> *list, int id)
             else
                 previous->next = element->next;
 
-            list->nb--;
-
             break;
         }
 
         previous = element;
     }
 
-    element->next = NULL;
+    if(element)
+    {
+        element->next = NULL;
+    }
+    
     return element;
 
 }
@@ -117,7 +119,7 @@ void reverse(struct List<T> *list)
     struct List<T> *computed = initList<T>();
     T *element = NULL, *inserted = NULL;
 
-    while(list->nb)
+    while(list->first)
     {
         element = list->first;
         while(element->next)
@@ -130,6 +132,31 @@ void reverse(struct List<T> *list)
     delete computed;
 }
 
+template<typename T>
+void insertElement(struct List<T> *list, T* element_, int id)
+{
+    T *element = NULL;
+    T *next = NULL;
+    for(element = list->first; element; element = element->next)
+    {
+        if(element->id == id)
+        {
+            list->nb++;
+            element->next = element_;
+            element_->next = next;
+            element_->id = list->nb;
+
+            break;
+        }
+
+        if(element->next->next)
+        {
+            list->nb++;
+            next = element->next->next;
+        }
+    }
+}
+
 
 //nodes stuff
 struct Node* initNode(float x, float y, int type);
@@ -140,7 +167,7 @@ float getDistance(struct Segment *segment);
 float getDistance(struct Node *node1, struct Node *node2);
 float getPerimeter(struct List<struct Segment> *segments);
 void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct Node> *nodes, int n);
-void subdivise(struct List<struct Segment> *computed, struct Segment *segment, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments);
+void subdivise(struct Segment *segment_, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments, struct Segment *last_inserted);
 void sortSegment(struct List<struct Segment> *segments);
 bool travelingDirection(struct Segment *seg1, struct Segment *seg2);
 struct Node* generateNewPointOnSegment(struct Segment *segment, float length, float distance);

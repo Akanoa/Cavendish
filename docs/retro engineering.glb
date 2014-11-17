@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <MAIN>
-<GEODOCMANAGER aligngrille="false" angle="1" colgrille="-3618616" comauto="false" commentaires="" debx="-0.2781012879273962" deby="-0.06267240025561777" desgrille="1" eq="0" finx="1.2519272114277848" finy="0.6893964028117958" gradx="1.0" grady="1.0" grilx="1.0" grily="1.0" rapport="1.0" visaxe="true" visgrad="true" visgrille="true" visnb="false"/>
+<GEODOCMANAGER aligngrille="false" angle="1" colgrille="-3618616" comauto="false" commentaires="" debx="-0.2781012879273962" deby="-0.06762361550645485" desgrille="1" eq="0" finx="1.2519272114277848" finy="0.6943476180626329" gradx="1.0" grady="1.0" grilx="1.0" grily="1.0" rapport="1.0" visaxe="true" visgrad="true" visgrille="true" visnb="false"/>
 <GEOVECTOR>
 <AXE fictif="false" nom="(Ox)" vertical="false">
 <GEOASPECTLIGNE couleur="-65536" dash="0" epaisseur="0" istrace="false" visible="true"/>
@@ -21,7 +21,7 @@
 <GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
 </POINTREPERE>
 <POINTREPERE expr1="0.05" expr2="0.05" fictif="false" nom="4" type="0">
-<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="13" decy="-163" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-18" decy="-3" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
 </POINTREPERE>
 <POINTREPERE expr1="0.5" expr2="0.3" fictif="false" nom="5" type="0">
 <GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
@@ -137,5 +137,23 @@
 <POINTREPERE expr1="0.05" expr2="0.05" fictif="false" nom="16" type="0">
 <GEOASPECTPOINT affichenom="true" couleur="-52429" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
 </POINTREPERE>
+<SEGMENT fictif="false" nom="" p1="1" p2="2">
+<GEOASPECTSEGMENT couleur="-65281" dash="0" epaisseur="0" istrace="false" traits="0" visible="true"/>
+</SEGMENT>
+<SEGMENT fictif="false" nom="" p1="3" p2="4">
+<GEOASPECTSEGMENT couleur="-65281" dash="0" epaisseur="0" istrace="false" traits="0" visible="true"/>
+</SEGMENT>
+<SEGMENT fictif="false" nom="" p1="4" p2="1">
+<GEOASPECTSEGMENT couleur="-65281" dash="0" epaisseur="0" istrace="false" traits="0" visible="true"/>
+</SEGMENT>
+<SEGMENT fictif="false" nom="" p1="5" p2="6">
+<GEOASPECTSEGMENT couleur="-65281" dash="0" epaisseur="0" istrace="false" traits="0" visible="true"/>
+</SEGMENT>
+<SEGMENT fictif="false" nom="" p1="5" p2="2">
+<GEOASPECTSEGMENT couleur="-65281" dash="0" epaisseur="0" istrace="false" traits="0" visible="true"/>
+</SEGMENT>
+<SEGMENT fictif="false" nom="" p1="6" p2="3">
+<GEOASPECTSEGMENT couleur="-65281" dash="0" epaisseur="0" istrace="false" traits="0" visible="true"/>
+</SEGMENT>
 </GEOVECTOR>
 </MAIN>
