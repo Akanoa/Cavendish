@@ -167,6 +167,7 @@ void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct 
     {
         segment = subdivise(segment, perimeter, nb_points, nodes, segments);
     }while((segment = segment->next));
+
 }
 
 struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments)
@@ -183,26 +184,30 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
 
     cout << "id: " << segment_->id << " => ni: " << n_segs-1 << " => delta: " << delta << " => L: " << L << endl;
 
-    for(int i=0; i<n_segs-1; i++)
-    {
-        //Node generation
-        node = generateNewPointOnSegment(segment_, L, delta*(i+1));
-        cout << "new point generated:" << endl << "\tx: "<< node->x << "\ty: " << node->y << endl << endl;
-        addElement(nodes, node);
 
-        //Segment generation
-        segment = initSegment(start, node, ORIGINAL);
+    if(n_segs-1>0)
+    {    
+        for(int i=0; i<n_segs-1; i++)
+        {
+            //Node generation
+            node = generateNewPointOnSegment(segment_, L, delta*(i+1));
+            cout << "new point generated:" << endl << "\tx: "<< node->x << "\ty: " << node->y << endl << endl;
+            addElement(nodes, node);
+
+            //Segment generation
+            segment = initSegment(start, node, ORIGINAL);
+            insertElement(segments, segment, last_segment->id);
+
+            last_segment = segment;
+            start = node;
+
+        }
+    
+        segment = initSegment(start, segment_->node2, ORIGINAL);
         insertElement(segments, segment, last_segment->id);
 
-        last_segment = segment;
-        start = node;
-
+        delete popElement(segments, segment_->id);
     }
-
-    segment = initSegment(start, segment_->node2, ORIGINAL);
-    insertElement(segments, segment, last_segment->id);
-
-    delete popElement(segments, segment_->id);
 
     cout << "------------------------" << endl << endl;
 

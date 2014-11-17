@@ -129,6 +129,17 @@ int main(int argc, char **argv)
     }
 
 
+    i=1;
+    for(struct Segment *seg = segments->first; seg; seg=seg->next)
+    {
+        seg->zone = i;
+        sprintf(line_tmp, "%3d%4d%4d", i, seg->node1->id, seg->node2->id);
+        str_tmp = line_tmp;
+        original_segments.push_back(str_tmp);
+        i++;
+    }
+
+
     sortSegment(segments);
 
 /*    tmp= nodes->first;
@@ -138,6 +149,13 @@ int main(int argc, char **argv)
     }while((tmp = tmp->next));*/
 
     subdiviseOutline(segments, nodes, nb_points_wanted);
+
+    cout << endl << "*****************" << endl << endl;
+
+    for(struct Segment *seg = segments->first; seg; seg=seg->next)
+    {
+        cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+    }
 
 
     //generate list of points
@@ -151,16 +169,6 @@ int main(int argc, char **argv)
         nb_final_points++;
         i++;
     }while((tmp = tmp->next));
-
-    i=1;
-    for(struct Segment *seg = segments->first; seg; seg=seg->next)
-    {
-        seg->zone = i;
-        sprintf(line_tmp, "%3d%4d%4d", i, seg->node1->id, seg->node2->id);
-        str_tmp = line_tmp;
-        original_segments.push_back(str_tmp);
-        i++;
-    }
 
 
     //add not general inforamation

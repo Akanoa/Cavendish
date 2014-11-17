@@ -23,7 +23,7 @@ all: $(PATH_DST)$(EXEC)
 $(PATH_DST)$(EXEC): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
-$(PATH_DST)%.o : $(PATH_SRC)%.cpp $(PATH_SRC)%.h
+$(PATH_DST)%.o : $(PATH_SRC)%.cpp
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 launch:
