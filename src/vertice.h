@@ -136,23 +136,16 @@ template<typename T>
 void insertElement(struct List<T> *list, T* element_, int id)
 {
     T *element = NULL;
-    T *next = NULL;
+
     for(element = list->first; element; element = element->next)
     {
         if(element->id == id)
         {
             list->nb++;
+            element_->next = element->next;
             element->next = element_;
-            element_->next = next;
             element_->id = list->nb;
-
             break;
-        }
-
-        if(element->next->next)
-        {
-            list->nb++;
-            next = element->next->next;
         }
     }
 }
@@ -167,7 +160,7 @@ float getDistance(struct Segment *segment);
 float getDistance(struct Node *node1, struct Node *node2);
 float getPerimeter(struct List<struct Segment> *segments);
 void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct Node> *nodes, int n);
-void subdivise(struct Segment *segment_, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments, struct Segment *last_inserted);
+struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments);
 void sortSegment(struct List<struct Segment> *segments);
 bool travelingDirection(struct Segment *seg1, struct Segment *seg2);
 struct Node* generateNewPointOnSegment(struct Segment *segment, float length, float distance);
