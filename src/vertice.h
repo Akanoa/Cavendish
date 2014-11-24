@@ -1,5 +1,8 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
+
+#define PI 3.14159265
 
 enum type {ORIGINAL, GENERATED};
 
@@ -20,6 +23,15 @@ struct Segment
     int zone;
     int type;
     struct Segment *next;
+};
+
+struct Element
+{
+    Segment *segment1;
+    Segment *segment2;
+    Segment *segment3;
+    int id;
+    struct Element *next;
 };
 
 template<typename T>
@@ -162,5 +174,6 @@ float getPerimeter(struct List<struct Segment> *segments);
 void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct Node> *nodes, int n);
 struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments);
 void sortSegment(struct List<struct Segment> *segments);
-bool travelingDirection(struct Segment *seg1, struct Segment *seg2);
+bool travelingDirection(struct List<struct Segment> *segments, std::vector<float> *values=NULL);
 struct Node* generateNewPointOnSegment(struct Segment *segment, float length, float distance);
+float getAngle(struct Segment* segment1, struct Segment* segment2);
