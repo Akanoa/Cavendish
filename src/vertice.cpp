@@ -167,6 +167,13 @@ void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct 
     {
         segment = subdivise(segment, perimeter, nb_points, nodes, segments);
     }while((segment = segment->next));
+
+    cout << "***************************" << endl << endl;
+
+    for(struct Segment *seg = segments->first; seg; seg=seg->next)
+    {
+        cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+    }
 }
 
 struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments)
