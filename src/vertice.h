@@ -177,4 +177,4 @@ void sortSegment(struct List<struct Segment> *segments);
 bool travelingDirection(struct List<struct Segment> *segments, std::vector<float> *values=NULL);
 struct Node* generateNewPointOnSegment(struct Segment *segment, float length, float distance);
 float getAngle(struct Segment* segment1, struct Segment* segment2);
-void Cavendish(struct List<struct Segment> *segments);
+void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes);

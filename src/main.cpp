@@ -171,7 +171,7 @@ int main(int argc, char **argv)
         i++;
     }while((tmp = tmp->next));
 
-    Cavendish(segments);
+    Cavendish(segments, nodes);
 
 
     //add not general inforamation

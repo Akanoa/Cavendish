@@ -229,49 +229,47 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
 }
 
 
-void Cavendish(struct List<struct Segment> *segments){
+void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes){
 
     float rad_angle = 3.14;
     float deg_angle = 0;
-    int debut = 0;
-    int fin = 0;
-    int node_deb=0;
-    int node_mid1=0;
-    int node_mid2=0;
-    int node_fin=0;
+
+    //Nouveau noeuds
+    struct Node *new_node1 = NULL;
+    struct Node *new_node2 = NULL;
+    //Noeuds a supprimer
+    int del_node = 0;
+    //Elements à supprimer
+    int del_seg1 = 0;
+    int del_seg2 = 0;
 
     for (struct Segment *seg = segments->first; seg->next; seg=seg->next){
         if (getAngle(seg,seg->next) < rad_angle){
             rad_angle = getAngle(seg, seg->next);
             deg_angle = rad_angle *57.2957795;
-            debut = seg->id;
-            fin = seg->next->id;
-            node_deb=seg->node1->id;
-            node_mid1=seg->node2->id;
-            node_mid2=seg->next->node1->id;
-            node_fin=seg->next->node2->id;
+            //Nouveau noeuds
+            new_node1 = seg->node1;
+            new_node2 = seg->next->node2;
+            //Noeuds a supprimer
+            del_node = seg->node2->id;
+            //Elements à supprimer
+            del_seg1 = seg->id;
+            del_seg2 = seg->next->id;
+
 
             }         
         }
 
 
     if (deg_angle<90){
-        //addElement(segments, initSegment(seg->node1,seg->next->node2, ORIGINAL));
-        //popElement(segments, seg->id);
-        //popElement(segments, seg->next->id);
-        //supprimer seg et seg->next
-        //supprimer sed->node2 ou seg->next->node1
-        //réordonner list segment
+        Segment* nouveau = initSegment(new_node1,new_node2, ORIGINAL);
+        addElement(segments, nouveau);
+        popElement(nodes, del_node);
+        popElement(segments, del_seg1);
+        popElement(segments, del_seg2);
+        travelingDirection(segments);
     }
-
-
     
     cout << (deg_angle) << endl;
-    cout << debut << endl;
-    cout << fin << endl;
-    cout << node_deb << endl;
-    cout << node_mid1 << endl;
-    cout << node_mid2 << endl;
-    cout << node_fin << endl;
 
 }
