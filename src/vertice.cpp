@@ -27,6 +27,20 @@ struct Segment* initSegment(Node *node1, Node *node2, int type)
     return segment;
 }
 
+struct Element* initElement(Segment *segment1, Segment *segment2, Segment *segment3, int type)
+{
+    struct Element *element = new struct Element;
+    element->segment1 = segment1;
+    element->segment2 = segment2;
+    element->segment3 = segment3;
+    element->type  = type;
+    element->id    = 0;
+    element->zone  = 0;
+    element->next  = NULL;
+
+    return element;
+}
+
 float getAngle(struct Segment* segment1, struct Segment* segment2)
 {
     return atan2(segment2->node2->y - segment2->node1->y, segment2->node2->x - segment2->node1->x) - atan2(segment1->node2->y - segment1->node1->y, segment1->node2->x - segment1->node1->x);
@@ -81,13 +95,13 @@ void sortSegment(struct List<struct Segment> *segments)
     }
 
 
-    if(travelingDirection(segments, NULL))
+    if(travelingDirection(segments))
         cout << "CW" << endl;
     else
         cout << "CCW" << endl;
 
 
-    if(!travelingDirection(segments, NULL))
+    if(!travelingDirection(segments))
     {
         reverse(segments);
 
@@ -109,33 +123,68 @@ void sortSegment(struct List<struct Segment> *segments)
     }
 
 
-    if(travelingDirection(segments, NULL))
+    if(travelingDirection(segments))
         cout << "CW" << endl;
     else
         cout << "CCW" << endl;
 
 }
 
-bool travelingDirection(struct List<struct Segment> *segments, vector<float> *values)
+bool travelingDirection(struct List<struct Segment> *segments)
 {
     float sum = 0.0;
-    float res = 0.0;
     struct Segment *last = NULL;
     for(struct Segment *seg = segments->first; seg->next; seg=seg->next)
     {
-        res = getAngle(seg, seg->next);
-        if (values)
-            values->push_back(res);
-        sum += res;
+        sum += getAngle(seg, seg->next);
         last=seg->next;
     }
 
-    res = getAngle(last, segments->first);
-    if (values)
-        values->push_back(res);
-    sum += res;
+    sum += getAngle(last, segments->first);
 
     return (sum>=0)?true:false; 
+}
+
+float minAngle(struct List<struct Segment> *segments, struct Segment *segment_n_1, struct Segment *segment1, struct Segment *segment2, struct Segment *segment_n1)
+{
+    //Nouveau noeuds
+    //struct Node *new_node1 = NULL;
+    //struct Node *new_node2 = NULL;
+    //Noeuds a supprimer
+    //int del_node = 0;
+    //Elements à supprimer
+    int del_seg1 = 0;
+    int del_seg2 = 0;
+    //Element précédent
+    int seg_n_1 = 0;
+    int prev = 0;
+
+    float min = PI, tmp = 0.0; //max angle
+    reverse(segments);
+    for(struct Segment *seg = segments->first; seg->next; seg=seg->next)
+    {
+        tmp = getAngle(seg, seg->next);
+        if(tmp<min){
+            del_seg1 = seg->id;
+            del_seg2 = seg->next->id;
+           
+            seg_n_1 = prev;
+
+            //del_node = seg->node1->id;
+            min = tmp;
+
+        }
+        prev = seg->id;
+    }
+    segment2 = getElement (segments, del_seg1);
+    segment1 = getElement (segments, del_seg2);
+    segment_n1 = getElement (segments, segment1->next->id);
+            
+            
+    segment_n_1 = getElement(segments, seg_n_1);
+    reverse(segments);
+
+    return min;
 }
 
 
@@ -229,47 +278,81 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
 }
 
 
-void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes){
-
-    float rad_angle = 3.14;
-    float deg_angle = 0;
-
-    //Nouveau noeuds
-    struct Node *new_node1 = NULL;
-    struct Node *new_node2 = NULL;
-    //Noeuds a supprimer
-    int del_node = 0;
-    //Elements à supprimer
-    int del_seg1 = 0;
-    int del_seg2 = 0;
-
-    for (struct Segment *seg = segments->first; seg->next; seg=seg->next){
-        if (getAngle(seg,seg->next) < rad_angle){
-            rad_angle = getAngle(seg, seg->next);
-            deg_angle = rad_angle *57.2957795;
-            //Nouveau noeuds
-            new_node1 = seg->node1;
-            new_node2 = seg->next->node2;
-            //Noeuds a supprimer
-            del_node = seg->node2->id;
-            //Elements à supprimer
-            del_seg1 = seg->id;
-            del_seg2 = seg->next->id;
+void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements){
 
 
-            }         
-        }
+    struct Segment* segment1 = NULL;
+    struct Segment* segment2 = NULL;
 
+    struct Segment* previous = NULL;
+    struct Segment* next = NULL;
 
-    if (deg_angle<90){
-        Segment* nouveau = initSegment(new_node1,new_node2, ORIGINAL);
-        addElement(segments, nouveau);
-        popElement(nodes, del_node);
-        popElement(segments, del_seg1);
-        popElement(segments, del_seg2);
-        travelingDirection(segments);
+    float angle_min = 0.0;
+
+    angle_min = minAngle(segments, previous, segment1, segment2, next);
+
+    ///////////////////////////////////////// PREMIER CAS //////////////////////////////////////
+    if (angle_min < (PI/2)){
+        struct Segment* new_seg = initSegment(segment1->node1, segment2->node2, ORIGINAL);
+        struct Element* new_element = initElement(segment1, segment2, new_seg, ORIGINAL);
+        addElement(segments, new_seg);
+        popElement(segments, segment1->id);
+        popElement(segments, segment2->id);
+        popElement(nodes, segment1->node2->id);
+        insertElement(segments,new_seg, previous->id);
+        addElement(elements, new_element);
     }
+
+    ///////////////////////////////////////// SECOND CAS //////////////////////////////////////
+
+    if ((angle_min>=(PI/2)) && (angle_min<(2*PI/3))){
+        struct Node* node_1 = segment2->node1;
+        struct Node* node_3 = NULL;
+        float x_1 = node_1->x;
+        float y_1 = node_1->y;
+        float x_3 = 0.0;
+        float y_3 = 0.0;
+
+        float x_int = node_1->x + 10;
+        float y_int = node_1->y;
+        struct Node* node_int = initNode(x_int, y_int, ORIGINAL);
+        struct Segment* intermediaire = initSegment(node_1, node_int, ORIGINAL);
+
+        float angle_int = (angle_min/2 ) + getAngle(intermediaire, segment2);
+
+        float r = (1/6)*(getDistance(previous)+2*(getDistance(segment1)+getDistance(segment2))+getDistance(next));
+
+        x_3 = x_1 + r*cos(angle_int);
+        y_3 = y_1 + r*cos(angle_int);
+
+        node_3 = initNode(x_3, y_3, ORIGINAL);
+
+        addElement(nodes, node_3);
+
+        struct Segment* new_seg1 = initSegment(node_1, node_3, ORIGINAL);
+        struct Segment* new_seg2 = initSegment(segment1->node1, node_3, ORIGINAL);
+        struct Segment* new_seg3 = initSegment(node_3, segment2->node2, ORIGINAL);
+        struct Element* new_element1 = initElement(segment1, new_seg1, new_seg2, ORIGINAL);
+        struct Element* new_element2 = initElement(segment1, new_seg1, new_seg3, ORIGINAL);
+
+        addElement(segments, new_seg2);
+        addElement(segments, new_seg3);
+        popElement(segments, segment1->id);
+        popElement(segments, segment2->id);
+        popElement(nodes, segment1->node2->id);
+        insertElement(segments, new_seg2, previous->id);
+        insertElement(segments, new_seg3, new_seg2->id);
+        addElement(elements, new_element1);
+        addElement(elements, new_element2);
+
+
+
+
+
+
+    }
+
     
-    cout << (deg_angle) << endl;
+    
 
 }

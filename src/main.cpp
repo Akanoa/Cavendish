@@ -66,8 +66,10 @@ int main(int argc, char **argv)
 
     struct List<struct Node> *nodes = initList<struct Node>();
     struct List<struct Segment> *segments = initList<struct Segment>();
+    struct List<struct Element> *elements = initList<struct Element>();
     struct Node *node = NULL;
     struct Segment *segment = NULL;
+    struct Segment *element = NULL;
 
 
     //parsing
@@ -171,7 +173,7 @@ int main(int argc, char **argv)
         i++;
     }while((tmp = tmp->next));
 
-    Cavendish(segments, nodes);
+    Cavendish(segments, nodes, elements);
 
 
     //add not general inforamation
