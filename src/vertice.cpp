@@ -323,7 +323,7 @@ void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *
         float r = (1/6)*(getDistance(previous)+2*(getDistance(segment1)+getDistance(segment2))+getDistance(next));
 
         x_3 = x_1 + r*cos(angle_int);
-        y_3 = y_1 + r*cos(angle_int);
+        y_3 = y_1 + r*sin(angle_int);
 
         node_3 = initNode(x_3, y_3, ORIGINAL);
 
@@ -344,13 +344,53 @@ void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *
         insertElement(segments, new_seg3, new_seg2->id);
         addElement(elements, new_element1);
         addElement(elements, new_element2);
+    }
 
+    if (angle_min > (2*PI/3)){
 
+        float r = getDistance(segment1);
+        float t = getDistance(segment2);
+        float x_3 = 0.0;
+        float y_3 = 0.0;
 
+        struct Segment* equi = NULL;
+        struct Node* node_3 = NULL;
 
+        if (r > t){
+            equi = segment2;
+        }
+        else equi = segment1;
+
+        struct Node* node_1 = equi->node1;
+
+        float x_int = node_1->x + 10;
+        float y_int = node_1->y;
+        struct Node* node_int = initNode(x_int, y_int, ORIGINAL);
+
+        struct Segment* intermediaire = initSegment(node_1, node_int, ORIGINAL);
+        float angle_int = (angle_min/3 ) + getAngle(intermediaire, equi);
+
+        x_3 = equi->node1->x + r*cos(angle_int);
+        y_3 = equi->node1->y + r*sin(angle_int);
+
+        node_3 = initNode(x_3, y_3, ORIGINAL);
+
+        addElement(nodes, node_3);
+
+        struct Segment* new_seg1 = initSegment(equi->node1, node_3, ORIGINAL);
+        struct Segment* new_seg2 = initSegment(node_3, equi->node2, ORIGINAL);
+        struct Element* new_element1 = initElement(segment1, new_seg1, new_seg2, ORIGINAL);
+
+        addElement(segments, new_seg1);
+        addElement(segments, new_seg2);
+        popElement(segments, segment1->id);
+        insertElement(segments, new_seg1, previous->id);
+        insertElement(segments, new_seg2, new_seg1->id);
+        addElement(elements, new_element1);
 
 
     }
+
 
     
     
