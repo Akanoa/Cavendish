@@ -145,7 +145,7 @@ bool travelingDirection(struct List<struct Segment> *segments)
     return (sum>=0)?true:false; 
 }
 
-float minAngle(struct List<struct Segment> *segments, struct Segment *segment_n_1, struct Segment *segment1, struct Segment *segment2, struct Segment *segment_n1)
+float minAngle(struct List<struct Segment> *segments, struct Segment *segment_n_1, struct Segment *segment1, struct Segment *segment2, struct Segment *segment_n1, int nb_segments)
 {
     //Nouveau noeuds
     //struct Node *new_node1 = NULL;
@@ -159,11 +159,15 @@ float minAngle(struct List<struct Segment> *segments, struct Segment *segment_n_
     int seg_n_1 = 0;
     int prev = 0;
 
+    nb_segments = 0;
+
     float min = PI, tmp = 0.0; //max angle
     reverse(segments);
     for(struct Segment *seg = segments->first; seg->next; seg=seg->next)
     {
+        nb_segments = nb_segments + 1;
         tmp = getAngle(seg, seg->next);
+
         if(tmp<min){
             del_seg1 = seg->id;
             del_seg2 = seg->next->id;
@@ -287,9 +291,38 @@ void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *
     struct Segment* previous = NULL;
     struct Segment* next = NULL;
 
+    int nb_segments = 0;
+
     float angle_min = 0.0;
 
-    angle_min = minAngle(segments, previous, segment1, segment2, next);
+    angle_min = minAngle(segments, previous, segment1, segment2, next, nb_segments);
+
+    ///////////////////////////////////////// FIN //////////////////////////////////////
+    if (nb_segments == 4){
+        struct Segment* temp_seg1 = initSegment(segment1->node1, segment2->node2, ORIGINAL);
+        struct Segment* temp_seg2 = initSegment(segment1->node2, next->node2, ORIGINAL);
+        struct Segment* last_seg = NULL;
+        float l = getDistance(temp_seg1);
+        float r = getDistance(temp_seg2);
+
+        if (r > l){
+            last_seg = temp_seg2;
+       }
+       else last_seg = temp_seg1;
+
+       struct Element* last_element1 = initElement(segment1, segment2, last_seg, ORIGINAL);
+       struct Element* last_element2 = initElement(previous, next, last_seg, ORIGINAL);
+
+        addElement(elements, last_element1);
+        addElement(elements, last_element2);
+        popElement(segments, segment1->id);
+        popElement(segments, segment2->id);
+        popElement(segments, previous->id);
+        popElement(segments, next->id);
+
+        //break;
+
+    }
 
     ///////////////////////////////////////// PREMIER CAS //////////////////////////////////////
     if (angle_min < (PI/2)){
