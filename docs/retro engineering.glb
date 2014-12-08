@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <MAIN>
-<GEODOCMANAGER aligngrille="false" angle="1" colgrille="-3618616" comauto="false" commentaires="" debx="-0.2781012879273962" deby="-0.06762361550645485" desgrille="1" eq="0" finx="1.2519272114277848" finy="0.6943476180626329" gradx="1.0" grady="1.0" grilx="1.0" grily="1.0" rapport="1.0" visaxe="true" visgrad="true" visgrille="true" visnb="false"/>
+<GEODOCMANAGER aligngrille="false" angle="1" colgrille="-3618616" comauto="false" commentaires="" debx="-0.29639346635882796" deby="-0.06762361550645485" desgrille="1" eq="0" finx="1.2702193898592167" finy="0.6943476180626329" gradx="1.0" grady="1.0" grilx="1.0" grily="1.0" rapport="1.0" visaxe="true" visgrad="true" visgrille="true" visnb="false"/>
 <GEOVECTOR>
 <AXE fictif="false" nom="(Ox)" vertical="false">
 <GEOASPECTLIGNE couleur="-65536" dash="0" epaisseur="0" istrace="false" visible="true"/>
@@ -155,5 +155,23 @@
 <SEGMENT fictif="false" nom="" p1="6" p2="3">
 <GEOASPECTSEGMENT couleur="-65281" dash="0" epaisseur="0" istrace="false" traits="0" visible="true"/>
 </SEGMENT>
+<OBSERVLONGUEUR apres0="" avant0="12=" decx="0.03133225712436089" decy="0.019049280839227196" ispdependent="true" nbapres="1" nbavant="1" nom="T25" obj="[12]" p="4">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVLONGUEUR>
+<OBSERVCOORD apres0="" avant0="4" ispdependent="false" nbapres="1" nbavant="1" nom="T26" p1="4" x="0.05367788894948439" y="0.0360044722589411">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVCOORD>
+<OBSERVCOORD apres0="" avant0="9" ispdependent="false" nbapres="1" nbavant="1" nom="T27" p1="9" x="0.38284946185133034" y="0.5271493588109016">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVCOORD>
+<OBSERVCOORD apres0="" avant0="22" ispdependent="false" nbapres="1" nbavant="1" nom="T28" p1="22" x="0.544822775501445" y="0.4209087982446974">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVCOORD>
+<POINTREPERE expr1="0.05" expr2="0.174999997" fictif="false" nom="17" type="0">
+<GEOASPECTPOINT affichenom="false" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTREPERE>
+<OBSERVCOORD apres0="" avant0="17" ispdependent="false" nbapres="1" nbavant="1" nom="T29" p1="17" x="0.0737068470890147" y="0.17446553070178095">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVCOORD>
 </GEOVECTOR>
 </MAIN>

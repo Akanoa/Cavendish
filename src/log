@@ -1,0 +1,183 @@
+file: maillage
+segment: 1
+	node 1: 1
+	node 2: 2
+
+segment: 2
+	node 1: 2
+	node 2: 5
+
+segment: 3
+	node 1: 5
+	node 2: 6
+
+segment: 4
+	node 1: 6
+	node 2: 3
+
+segment: 5
+	node 1: 3
+	node 2: 4
+
+segment: 6
+	node 1: 4
+	node 2: 1
+
+CCW
+
+----------------------
+
+segment: 1
+	node 1: 1
+	node 2: 4
+
+segment: 2
+	node 1: 4
+	node 2: 3
+
+segment: 3
+	node 1: 3
+	node 2: 6
+
+segment: 4
+	node 1: 6
+	node 2: 5
+
+segment: 5
+	node 1: 5
+	node 2: 2
+
+segment: 6
+	node 1: 2
+	node 2: 1
+
+CW
+Delta: 0.164706
+id: 1 => ni: 2 => delta: 0.166667 => L: 0.5
+new point generated:
+	x: 0.05	y: 0.383333
+
+new point generated:
+	x: 0.05	y: 0.216667
+
+------------------------
+
+id: 2 => ni: 4 => delta: 0.18 => L: 0.9
+new point generated:
+	x: 0.23	y: 0.05
+
+new point generated:
+	x: 0.41	y: 0.05
+
+new point generated:
+	x: 0.59	y: 0.05
+
+new point generated:
+	x: 0.77	y: 0.05
+
+------------------------
+
+id: 3 => ni: 1 => delta: 0.125 => L: 0.25
+new point generated:
+	x: 0.95	y: 0.175
+
+------------------------
+
+id: 4 => ni: 2 => delta: 0.15 => L: 0.45
+new point generated:
+	x: 0.8	y: 0.3
+
+new point generated:
+	x: 0.65	y: 0.3
+
+------------------------
+
+id: 5 => ni: 1 => delta: 0.125 => L: 0.25
+new point generated:
+	x: 0.5	y: 0.425
+
+------------------------
+
+id: 6 => ni: 2 => delta: 0.15 => L: 0.45
+new point generated:
+	x: 0.35	y: 0.55
+
+new point generated:
+	x: 0.2	y: 0.55
+
+------------------------
+
+***************************
+
+segment: 7
+	node 1: 1
+	node 2: 7
+
+segment: 8
+	node 1: 7
+	node 2: 8
+
+segment: 9
+	node 1: 8
+	node 2: 4
+
+segment: 10
+	node 1: 4
+	node 2: 9
+
+segment: 11
+	node 1: 9
+	node 2: 10
+
+segment: 12
+	node 1: 10
+	node 2: 11
+
+segment: 13
+	node 1: 11
+	node 2: 12
+
+segment: 14
+	node 1: 12
+	node 2: 3
+
+segment: 15
+	node 1: 3
+	node 2: 13
+
+segment: 16
+	node 1: 13
+	node 2: 6
+
+segment: 17
+	node 1: 6
+	node 2: 14
+
+segment: 18
+	node 1: 14
+	node 2: 15
+
+segment: 19
+	node 1: 15
+	node 2: 5
+
+segment: 20
+	node 1: 5
+	node 2: 16
+
+segment: 21
+	node 1: 16
+	node 2: 2
+
+segment: 22
+	node 1: 2
+	node 2: 17
+
+segment: 23
+	node 1: 17
+	node 2: 18
+
+segment: 24
+	node 1: 18
+	node 2: 1
+
