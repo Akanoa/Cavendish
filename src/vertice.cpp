@@ -145,7 +145,7 @@ bool travelingDirection(struct List<struct Segment> *segments)
     return (sum>=0)?true:false; 
 }
 
-float minAngle(struct List<struct Segment> *segments, struct Segment *segment_n_1, struct Segment *segment1, struct Segment *segment2, struct Segment *segment_n1, int nb_segments)
+float minAngle(struct List<struct Segment> *segments, struct Segment *segment_n_1, struct Segment *segment1, struct Segment *segment2, struct Segment *segment_n1)
 {
     //Nouveau noeuds
     //struct Node *new_node1 = NULL;
@@ -158,14 +158,16 @@ float minAngle(struct List<struct Segment> *segments, struct Segment *segment_n_
     //Element précédent
     int seg_n_1 = 0;
     int prev = 0;
+    int next = 0;
+    cout << "angle_min" << endl;
 
-    nb_segments = 0;
+    //nb_segments = 0;
 
     float min = PI, tmp = 0.0; //max angle
     reverse(segments);
     for(struct Segment *seg = segments->first; seg->next; seg=seg->next)
     {
-        nb_segments = nb_segments + 1;
+        //nb_segments = nb_segments + 1;
         tmp = getAngle(seg, seg->next);
 
         if(tmp<min){
@@ -174,18 +176,29 @@ float minAngle(struct List<struct Segment> *segments, struct Segment *segment_n_
            
             seg_n_1 = prev;
 
+            if (seg->next->next == NULL){
+                next = segments->first->id;
+                break;
+            }
+
+            else next = seg->next->next->id;
+
             //del_node = seg->node1->id;
             min = tmp;
-
         }
         prev = seg->id;
     }
+
+    *segment_n1 = *getElement (segments, next);
+
     *segment2 = *getElement (segments, del_seg1);
     *segment1 = *getElement (segments, del_seg2);
-    *segment_n1 = *getElement (segments, segment1->next->id);
+    
     *segment_n_1= *getElement(segments, seg_n_1);
     
     reverse(segments);
+
+    cout << "min_angle" << endl;
 
     return min;
 }
@@ -283,19 +296,22 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
 
 void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements){
 
+    cout << "cavendish" << endl;
+
     struct Segment *previous = new struct Segment;
     struct Segment *segment1 = new struct Segment;
     struct Segment *segment2 = new struct Segment;
     struct Segment *next = new struct Segment;
 
-    int nb_segments = 0;
+    //int nb_segments = 0;
 
     float angle_min = 0.0;
 
-    angle_min = minAngle(segments, previous, segment1, segment2, next, nb_segments);
+    angle_min = PI - minAngle(segments, previous, segment1, segment2, next);
+    cout << angle_min << endl;
 
     ///////////////////////////////////////// FIN //////////////////////////////////////
-    if (nb_segments == 4){
+    if (segments->nb == 4){
         struct Segment* temp_seg1 = initSegment(segment1->node1, segment2->node2, ORIGINAL);
         struct Segment* temp_seg2 = initSegment(segment1->node2, next->node2, ORIGINAL);
         struct Segment* last_seg = NULL;
@@ -316,21 +332,26 @@ void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *
         popElement(segments, segment2->id);
         popElement(segments, previous->id);
         popElement(segments, next->id);
+        segments->nb = 0;
 
-        //break;
+        cout << "i m here" << endl;
 
     }
+
+    if (segments->nb > 4){
 
     ///////////////////////////////////////// PREMIER CAS //////////////////////////////////////
     if (angle_min < (PI/2)){
         struct Segment* new_seg = initSegment(segment1->node1, segment2->node2, ORIGINAL);
         struct Element* new_element = initElement(segment1, segment2, new_seg, ORIGINAL);
-        addElement(segments, new_seg);
+        //addElement(segments, new_seg);
         popElement(nodes, segment1->node2->id);
         popElement(segments, segment1->id);
         popElement(segments, segment2->id);
         insertElement(segments,new_seg, previous->id);
         addElement(elements, new_element);
+
+        cout << "first" << endl;
     }
 
     ///////////////////////////////////////// SECOND CAS //////////////////////////////////////
@@ -365,8 +386,6 @@ void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *
         struct Element* new_element1 = initElement(segment1, new_seg1, new_seg2, ORIGINAL);
         struct Element* new_element2 = initElement(segment1, new_seg1, new_seg3, ORIGINAL);
 
-        addElement(segments, new_seg2);
-        addElement(segments, new_seg3);
         popElement(segments, segment1->id);
         popElement(segments, segment2->id);
         popElement(nodes, segment1->node2->id);
@@ -374,7 +393,11 @@ void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *
         insertElement(segments, new_seg3, new_seg2->id);
         addElement(elements, new_element1);
         addElement(elements, new_element2);
+
+        cout << "second" << endl;
     }
+
+    ///////////////////////////////////////// TROISIEME CAS //////////////////////////////////////
 
     if (angle_min > (2*PI/3)){
 
@@ -411,18 +434,15 @@ void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *
         struct Segment* new_seg2 = initSegment(node_3, equi->node2, ORIGINAL);
         struct Element* new_element1 = initElement(segment1, new_seg1, new_seg2, ORIGINAL);
 
-        addElement(segments, new_seg1);
-        addElement(segments, new_seg2);
         popElement(segments, segment1->id);
         insertElement(segments, new_seg1, previous->id);
         insertElement(segments, new_seg2, new_seg1->id);
         addElement(elements, new_element1);
 
+        cout << "third" << endl;
+
 
     }
-
-
-    
-    
+    }    
 
 }

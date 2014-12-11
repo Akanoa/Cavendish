@@ -69,7 +69,6 @@ int main(int argc, char **argv)
     struct List<struct Element> *elements = initList<struct Element>();
     struct Node *node = NULL;
     struct Segment *segment = NULL;
-    struct Segment *element = NULL;
 
 
     //parsing
@@ -173,8 +172,9 @@ int main(int argc, char **argv)
         i++;
     }while((tmp = tmp->next));
 
+    while (segments->nb >= 4){
     Cavendish(segments, nodes, elements);
-
+}
 
     //add not general inforamation
     string date, hour;

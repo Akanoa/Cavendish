@@ -182,4 +182,4 @@ bool travelingDirection(struct List<struct Segment> *segments);
 struct Node* generateNewPointOnSegment(struct Segment *segment, float length, float distance);
 float getAngle(struct Segment* segment1, struct Segment* segment2);
 void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements);
-float minAngle(struct List<struct Segment> *segments, struct Segment *segment_n_1, struct Segment *segment1, struct Segment *segment2, struct Segment *segment_n1, int nb_segments);
+float minAngle(struct List<struct Segment> *segments, struct Segment *segment_n_1, struct Segment *segment1, struct Segment *segment2, struct Segment *segment_n1);
