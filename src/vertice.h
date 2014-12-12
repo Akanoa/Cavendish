@@ -14,6 +14,7 @@ struct Node
     int id;
     int type;
     struct Node *next;
+    struct Node *prev;
 };
 
 struct Segment
@@ -24,6 +25,7 @@ struct Segment
     int zone;
     int type;
     struct Segment *next;
+    struct Segment *prev;
 };
 
 struct Element
@@ -35,13 +37,16 @@ struct Element
     int zone;
     int type;
     struct Element *next;
+    struct Element *prev;
 };
 
 template<typename T>
 struct List
 {
     int nb;
+    int last_id;
     T *first;
+    T *last;
 };
 
 //templates stuff
@@ -51,32 +56,38 @@ template<typename T>
 struct List<T>* initList()
 {
     struct List<T> *list = new List<T>;
-    list->nb= 0;
+    list->nb = 0;
+    list->last_id = 0;
     list->first = NULL;
+    list->last = NULL;
 
     return list;
 }
 
 template<typename T>
-void addElement(struct List<T> *list, T *element_)
+void addElement(struct List<T> *list, T *element)
 {
-    //find last node from nodes
-    T *element = list->first;
-
-    list->nb++;
-    element_->id = list->nb;
-
-    if(element)
+    if(list->first)
     {
-        while(element->next)
-            element = element->next;
-
-        element->next = element_;
+        element->id = list->last_id;
+        list->last_id++;
+        element->next = list->first;
+        element->prev = list->last;
+        list->first->prev = element;
+        list->last->next  = element;
+        list->last = element;
     }
     else
     {
-        list->first = element_;
+        element->id = list->last_id;
+        list->last_id++;
+        list->first = element;
+        list->last = element;
+        element->prev = element;
+        element->next = element;
     }
+
+    list->nb++;
 }
 
 
@@ -84,46 +95,53 @@ template<typename T>
 T* getElement(struct List<T> *list, int id)
 {
     T *element = list->first;
+    bool ok = false;
 
     if(list->first)
     {
-        while(element->next)
+        do
         {
             if(element->id == id)
+            {
+                ok = true;
                 break;
+            }
             element = element->next;
-        }
+        }while(element!=list->first);
     }
 
-    return element;
+    return ok?element:NULL;
 }
 
 template<typename T>
 T* popElement(struct List<T> *list, int id)
 {
-    T *element = NULL;
-    T *previous = list->first;
-    for(element = list->first; element; element = element->next)
-    {
-        if(element->id == id)
-        {
-            if(element == list->first)
-                list->first = element->next;
-
-            else
-                previous->next = element->next;
-
-            break;
-        }
-
-        previous = element;
-    }
+    T *element = getElement(list, id);
 
     if(element)
     {
+        if(list->first == element && list->last==element)
+        {
+            list->last = NULL;
+            list->first = NULL;
+        }
+        else
+        {
+            element->next->prev = element->prev;
+            element->prev->next = element->next;
+
+            if(element == list->last)
+                list->last = element->prev;
+
+            if(element == list->first)
+                list->first = element->next;
+        }
         element->next = NULL;
+        element->prev = NULL;
+
+        list->nb--;
     }
-    
+
     return element;
 
 }
@@ -132,14 +150,12 @@ template<typename T>
 void reverse(struct List<T> *list)
 {
     struct List<T> *computed = initList<T>();
-    T *element = NULL, *inserted = NULL;
+    T *inserted = NULL;
 
-    while(list->first)
+    while(list->nb)
     {
-        element = list->first;
-        while(element->next)
-            element = element->next;
-        inserted = popElement(list, element->id);
+
+        inserted = popElement(list, list->last->id);
         addElement(computed, inserted);
     }
 
@@ -150,19 +166,25 @@ void reverse(struct List<T> *list)
 template<typename T>
 void insertElement(struct List<T> *list, T* element_, int id)
 {
-    T *element = NULL;
+    T *element = getElement(list, id);
+    T* next = NULL;
 
-    for(element = list->first; element; element = element->next)
+    if(element)
     {
-        if(element->id == id)
-        {
-            list->nb++;
-            element_->next = element->next;
-            element->next = element_;
-            element_->id = list->nb;
-            break;
-        }
+        next = element->next;
+
+        element_->id = list->last_id;
+        list->last_id++;
+        
+        element->next = element_;
+        element_->prev = element;
+
+        next->prev = element_;
+        element_->next = next;
+ 
+        list->nb++;
     }
+
 }
 
 
