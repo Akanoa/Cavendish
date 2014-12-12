@@ -66,7 +66,7 @@ void sortSegment(struct List<struct Segment> *segments)
     while(left_segments)
     {
         element = segments->first;
-        do
+        for(int i=0; i<segments->nb; i++)
         {
             if(last_computed->node2->id == element->node1->id)
             {
@@ -86,16 +86,20 @@ void sortSegment(struct List<struct Segment> *segments)
                 last_computed = element;
                 break;
             }
-        }while((element = element->next));
+            element = element->next;
+        };
         left_segments--;
     }
 
     *segments = *computed;
     delete computed;
 
-    for(struct Segment *seg = segments->first; seg; seg=seg->next)
+    struct Segment *seg = segments->first;
+
+    for(int i=0; i<segments->nb; i++)
     {
         cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+        seg=seg->next;
     }
 
 
@@ -121,10 +125,14 @@ void sortSegment(struct List<struct Segment> *segments)
 
     cout << endl << "----------------------" << endl << endl;
 
-    for(struct Segment *seg = segments->first; seg; seg=seg->next)
+    seg = segments->first;
+
+    for(int i=0; i<segments->nb; i++)
     {
         cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+        seg=seg->next;
     }
+
 
 
     if(travelingDirection(segments))
@@ -137,72 +145,39 @@ void sortSegment(struct List<struct Segment> *segments)
 bool travelingDirection(struct List<struct Segment> *segments)
 {
     float sum = 0.0;
-    struct Segment *last = NULL;
-    for(struct Segment *seg = segments->first; seg->next; seg=seg->next)
+
+    struct Segment *seg = segments->first;
+
+    for(int i=0; i<segments->nb; i++)
     {
         sum += getAngle(seg, seg->next);
-        last=seg->next;
+        seg = seg->next;
     }
 
-    sum += getAngle(last, segments->first);
+    sum += getAngle(segments->last, segments->first);
 
     return (sum>=0)?true:false; 
 }
 
-float minAngle(struct List<struct Segment> *segments, struct Segment *segment_n_1, struct Segment *segment1, struct Segment *segment2, struct Segment *segment_n1)
+float minAngle(struct List<struct Segment> *segments, struct Segment *segment)
 {
-    //Nouveau noeuds
-    //struct Node *new_node1 = NULL;
-    //struct Node *new_node2 = NULL;
-    //Noeuds a supprimer
-    //int del_node = 0;
-    //Elements à supprimer
-    int del_seg1 = 0;
-    int del_seg2 = 0;
-    //Element précédent
-    int seg_n_1 = 0;
-    int prev = 0;
-    int next = 0;
-    cout << "angle_min" << endl;
+    float min = PI;
+    float tmp = min;
+    struct Segment *seg=segments->first, *found= new Segment;
 
-    //nb_segments = 0;
-
-    float min = PI/2, tmp = 0.0; //max angle
-    reverse(segments);
-    for(struct Segment *seg = segments->first; seg->next; seg=seg->next)
+    for(int i=0; i<segments->nb; i++)
     {
-        //nb_segments = nb_segments + 1;
-        tmp = abs(getAngle(seg, seg->next));
-
-        if(tmp<min){
-            del_seg1 = seg->id;
-            del_seg2 = seg->next->id;
-           
-            seg_n_1 = prev;
-
-            if (seg->next->next == NULL){
-                next = segments->first->id;
-                break;
-            }
-
-            else next = seg->next->next->id;
-
-            //del_node = seg->node1->id;
+        tmp = getAngle(seg, seg->next);
+        if(tmp<min)
+        {
+            found = seg;
             min = tmp;
         }
-        prev = seg->id;
     }
 
-    *segment_n1 = *getElement (segments, next);
+    if(found)
+        *segment = *found;
 
-    *segment2 = *getElement (segments, del_seg1);
-    *segment1 = *getElement (segments, del_seg2);
-    
-    *segment_n_1= *getElement(segments, seg_n_1);
-    
-    reverse(segments);
-
-    cout << "min_angle" << endl;
 
     return min;
 }
@@ -225,7 +200,7 @@ float getPerimeter(struct List<struct Segment> *segments)
     do
     {
         res += getDistance(segment);
-    }while((segment = segment->next));
+    }while((segment = segment->next)!=segments->last);
 
     return res;
 }
@@ -246,17 +221,18 @@ void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct 
 
     cout << "Delta: " << perimeter/nb_points << endl;
 
-    do
-    {
+    for(int i=0; i< segments->nb; i++)
         segment = subdivise(segment, perimeter, nb_points, nodes, segments);
-    }while((segment = segment->next));
+    
+
+    cout << "fin subdivie outline" << endl;
 
 }
 
 struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments)
 {
     float L = getDistance(segment_);
-    int n_segs = (int)round(L*n/perimiter);
+    int n_segs = (int)ceil(L*n/perimiter);
     float delta = L/n_segs;
 
     struct Segment *segment = NULL;
@@ -296,6 +272,11 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
 
     return last_segment->next;
 }
+
+// void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements)
+// {
+
+// }
 
 
 // /*/*void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements){
