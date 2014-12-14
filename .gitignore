@@ -1,4 +1,4 @@
 bin/*
-results/*
+#results/*
 !bin/*.exe
 !results
