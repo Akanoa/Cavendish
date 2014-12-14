@@ -25,7 +25,8 @@ using namespace std;
 int main(int argc, char **argv)
 {
     char src_[100], dst_[100];
-    int nb_points_wanted = 30;
+    int nb_points_wanted = 20;
+    bool only_outline = false;
     sprintf(src_, "..%s%s%s%s", sep, "docs", sep, "MPmaille.geo");
     sprintf(dst_, "..%s%s%s%s", sep, "results", sep, "maillage.cal");
 
@@ -38,8 +39,6 @@ int main(int argc, char **argv)
         mkdir(dst.substr(0, dst.find_last_of(sep)).c_str(), 0700);
     #endif
 
-    cout << "file: " << getFileName(dst, sep) << endl;
-
     if (argc > 1)
         src = argv[1];
 
@@ -48,12 +47,28 @@ int main(int argc, char **argv)
 
     if(argc > 3)
         nb_points_wanted = atoi(argv[3]);
+    if(argc > 4 && !strcmp(argv[4], "true"))
+        only_outline = true;
+
+    cout << "########################################" << endl;
+    cout << "#            ENIB Meshing              #" << endl;
+    cout << "########################################" << endl << endl;
+    cout << "---------------------------------------------" << endl;
+    cout << "usage: cavendish [src] [dst] [outiline_subdivions] [only_outline]" << endl << endl;
+    cout << "- src : RDM6 .geo file used as original outline geometry" << endl;
+    cout << "- dst : RDM6 .cal file, output file " << endl;
+    cout << "- outiline_subdivions : approximated number of outiline subdivions wanted" << endl;
+    cout << "- only_outline        : if true, generates only outline subdivised" << endl;
+    cout << "---------------------------------------------" << endl << endl;
+    cout << "Input file:          " << src << endl;
+    cout << "Output file:         " << dst << endl;
+    cout << "outiline subdivions: " << nb_points_wanted << endl << endl;
+    cout << "Meshing in progress..." << endl << endl;
 
     // variables declaration
     ifstream input(src.c_str(), ifstream::in);
 
     int nb_final_points(0);
-    int nb_final_elements(0);
     int nb_elements(0);
 
     string line;
@@ -110,8 +125,7 @@ int main(int argc, char **argv)
             {
                 int node_id1, node_id2;
                 sscanf(line.c_str(), "%*s %d %d %*s", &node_id1, &node_id2);
-                segment = initSegment(getElement<struct Node>(nodes, node_id1), getElement<struct Node>(nodes, node_id2), ORIGINAL);
-                cout << "node2: " << segment->node2 << endl;
+                segment = initSegment(getElement<struct Node>(nodes, node_id1), getElement<struct Node>(nodes, node_id2));
                 addElement<struct Segment>(segments, segment);
             }
             break;
@@ -148,34 +162,30 @@ int main(int argc, char **argv)
 
     sortSegment(segments);
 
-
-    struct Segment *seg = new struct Segment;
-
-    minAngle(segments, seg); 
-
-    cout << "segments initiaux" << segments->nb << endl;
-
-    return 0;
+    // cout << "segments initiaux " << segments->nb << endl;
 
     subdiviseOutline(segments, nodes, nb_points_wanted);
 
     // CAVENDISH
 
-    cout << "segments initiaux" << segments->nb << endl;
+    // cout << "segments finaux " << segments->nb << endl;
 
-    // while (segments->nb >= 4){
-    //     Cavendish(segments, nodes, elements);
-    // }
-
-    for(int i=0; i < segments->nb; i++)
+    if(only_outline)
     {
-        addElement(elements, initElement(seg, seg->next, seg, ORIGINAL));
-        seg = seg->next;
+        struct Segment *seg = segments->first;
+        for(int i=0; i < segments->nb; i++)
+        {
+            addElement(elements, initElement(seg->node1, seg->node2, seg->node1));
+            seg = seg->next;
+        }
     }
-
-    cout << nodes->nb << endl;
-    cout << segments->nb << endl;
-    cout << elements->nb << endl;
+    else
+    {
+        Cavendish(segments, nodes, elements);
+    }
+    // cout << nodes->nb << endl;
+    // cout << segments->nb << endl;
+    // cout << elements->nb << endl;
 
 
     //generate list of points
@@ -191,15 +201,13 @@ int main(int argc, char **argv)
 
 
     //generate list of elements
-    i=1;
     struct Element *tmp_el;
     tmp_el = elements->first;
     for(i=1; i<elements->nb+1; i++)
     {
-        sprintf(line_tmp, "%4d TRI3 1   1  11  11     %2d     %2d     %2d", i, tmp_el->segment1->node1->id, tmp_el->segment1->node2->id, tmp_el->segment3->node1->id);
+        sprintf(line_tmp, "%4d TRI3 1   1  11  11     %2d     %2d     %2d", i, tmp_el->node1->id, tmp_el->node2->id, tmp_el->node3->id);
         str_tmp = line_tmp;
         generated_elements.push_back(str_tmp);
-        nb_final_elements++;
         tmp_el = tmp_el->next;
     }
 
@@ -248,6 +256,11 @@ int main(int argc, char **argv)
     {
         output<<lines.at(i)<<endl;
     }
+
+    cout << "Completed :D" << endl << endl;
+    cout << nodes->nb << " nodes    generated" << endl;
+    cout << elements->nb << " elements generated" << endl << endl;
+    cout << "Be careful, RDM6 seems unable to handle too many elements!!" << endl;
 
     return 0;
 }

@@ -60,6 +60,10 @@ string float2scientific(float d, int nb_digit)
 
 	param = x;
 	fractpart = modf (param , &intpart);
+
+    if(fractpart < 1e-4)
+        fractpart = 0.0;
+
 	std::stringstream ss;
 	ss <<fractpart;
 	string s(ss.str());

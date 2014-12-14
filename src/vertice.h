@@ -6,6 +6,7 @@
 #define PI 3.14159265
 
 enum type {ORIGINAL, GENERATED};
+enum cavendish {FIRST_CASE, SECOND_CASE, THIRD_CASE, END_CASE};
 
 struct Node
 {
@@ -30,9 +31,9 @@ struct Segment
 
 struct Element
 {
-    Segment *segment1;
-    Segment *segment2;
-    Segment *segment3;
+    Node *node1;
+    Node *node2;
+    Node *node3;
     int id;
     int zone;
     int type;
@@ -120,7 +121,7 @@ T* popElement(struct List<T> *list, int id)
 
     if(element)
     {
-        if(list->first == element && list->last==element)
+        if(list->nb == 1)
         {
             list->last = NULL;
             list->first = NULL;
@@ -192,8 +193,8 @@ void insertElement(struct List<T> *list, T* element_, int id)
 struct Node* initNode(float x, float y, int type);
 
 //segments stuff
-struct Segment* initSegment(Node *node1, Node *node2,int type);
-struct Element* initElement(Segment *segment1, Segment *segment2, Segment *segment3, int type);
+struct Segment* initSegment(Node *node1, Node *node2);
+struct Element* initElement(Node *node1, Node *node2, Node *node3);
 float getDistance(struct Segment *segment);
 float getDistance(struct Node *node1, struct Node *node2);
 float getPerimeter(struct List<struct Segment> *segments);

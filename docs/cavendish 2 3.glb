@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<MAIN>
+<GEODOCMANAGER aligngrille="false" angle="0" colgrille="-3618616" comauto="false" commentaires="" debx="-9.456433977079291" deby="4.850219701380855" desgrille="1" eq="0" finx="-6.361332101329857" finy="6.379884800127687" gradx="1.0" grady="1.0" grilx="1.0" grily="1.0" rapport="1.0" visaxe="false" visgrad="true" visgrille="true" visnb="false"/>
+<GEOVECTOR>
+<AXE fictif="false" nom="(Ox)" vertical="false">
+<GEOASPECTLIGNE couleur="-65536" dash="0" epaisseur="0" istrace="false" visible="false"/>
+</AXE>
+<AXE fictif="false" nom="(Oy)" vertical="true">
+<GEOASPECTLIGNE couleur="-65536" dash="0" epaisseur="0" istrace="false" visible="false"/>
+</AXE>
+<POINTINTERDROITE d1="(Ox)" d2="(Oy)" fictif="false" nom="o">
+<GEOASPECTPOINT affichenom="true" couleur="-65536" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="1" taille="12" visible="false"/>
+</POINTINTERDROITE>
+<POINTLIBRE nom="A" x="-4.468480725623583" y="2.805804988662132">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTLIBRE>
+<POINTLIBRE nom="B" x="-3.9852607709750565" y="0.9863945578231297">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTLIBRE>
+<POINTLIBRE nom="C" x="-1.0260770975056683" y="1.99546485260771">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTLIBRE>
+<SEGMENT fictif="false" nom="" p1="A" p2="B">
+<GEOASPECTSEGMENT couleur="-16777216" dash="0" epaisseur="0" istrace="false" traits="0" visible="true"/>
+</SEGMENT>
+<SEGMENT fictif="false" nom="" p1="B" p2="C">
+<GEOASPECTSEGMENT couleur="-16777216" dash="0" epaisseur="0" istrace="false" traits="0" visible="true"/>
+</SEGMENT>
+<BISSECTRICE fictif="false" nom="(D1)" p1="A" p2="B" p3="C">
+<GEOASPECTLIGNE couleur="-16777216" dash="0" epaisseur="0" istrace="false" visible="true"/>
+</BISSECTRICE>
+<POINTSUR accueil="(D1)" contrainte="0.0" fictif="false" nom="D" x="-2.807983468162706" y="3.1867573696145124">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTSUR>
+<SEGMENT fictif="false" nom="" p1="A" p2="D">
+<GEOASPECTSEGMENT couleur="-16777216" dash="0" epaisseur="0" istrace="false" traits="0" visible="true"/>
+</SEGMENT>
+<POINTLIBRE nom="E" x="6.1507936507936485" y="3.00453514739229">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTLIBRE>
+<POINTLIBRE nom="F" x="-0.4866213151927443" y="2.9872108843537415">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="false"/>
+</POINTLIBRE>
+<DROITEPTS fictif="false" nom="" p1="A" p2="F">
+<GEOASPECTLIGNE couleur="-16777216" dash="2" epaisseur="0" istrace="false" visible="false"/>
+</DROITEPTS>
+<POINTINTERDROITE d1="(D1)" d2="(AF)" fictif="false" nom="G">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="false"/>
+</POINTINTERDROITE>
+<OBSERVANGLE apres0="°" avant0="angle(DAG)=" decx="0.32671201814058953" decy="0.2" ispdependent="true" nbapres="1" nbavant="1" nom="T1" p="A" p1="D" p2="A" p3="G" type="0">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="false"/>
+</OBSERVANGLE>
+<SEGMENT fictif="false" nom="" p1="C" p2="D">
+<GEOASPECTSEGMENT couleur="-16777216" dash="0" epaisseur="0" istrace="false" traits="0" visible="true"/>
+</SEGMENT>
+<OBSERVANGLE apres0="°" avant0="angle(DAB)=" ispdependent="false" nbapres="1" nbavant="1" nom="T2" p1="D" p2="A" p3="B" type="0" x="-5.738321995464853" y="2.978140589569161">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVANGLE>
+<OBSERVANGLE apres0="°" avant0="angle(DCB)=" decx="0.32671201814058953" decy="0.2" ispdependent="true" nbapres="1" nbavant="1" nom="T3" p="C" p1="D" p2="C" p3="B" type="0">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVANGLE>
+<OBSERVLONGUEUR apres0="" avant0="AD=" ispdependent="false" nbapres="1" nbavant="1" nom="T4" obj="[AD]" x="-4.758730158730159" y="4.066575963718821">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVLONGUEUR>
+<OBSERVLONGUEUR apres0="" avant0="AB=" ispdependent="false" nbapres="1" nbavant="1" nom="T5" obj="[AB]" x="-5.429931972789116" y="1.6538775510204085">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVLONGUEUR>
+<OBSERVLONGUEUR apres0="" avant0="BC=" ispdependent="false" nbapres="1" nbavant="1" nom="T6" obj="[BC]" x="-2.2281179138322003" y="1.2366439909297053">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVLONGUEUR>
+<OBSERVLONGUEUR apres0="" avant0="CD=" ispdependent="false" nbapres="1" nbavant="1" nom="T7" obj="[CD]" x="-1.339229024943311" y="3.2774603174603176">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVLONGUEUR>
+<OBSERVANGLE apres0="°" avant0="angle(ABC)=" decx="0.32671201814058953" decy="0.2" ispdependent="true" nbapres="1" nbavant="1" nom="T8" p="B" p1="A" p2="B" p3="C" type="0">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVANGLE>
+<OBSERVANGLE apres0="°" avant0="angle(ADC)=" decx="0.32671201814058953" decy="0.2" ispdependent="true" nbapres="1" nbavant="1" nom="T9" p="D" p1="A" p2="D" p3="C" type="0">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVANGLE>
+<SEGMENT fictif="false" nom="" p1="A" p2="C">
+<GEOASPECTSEGMENT couleur="-16777216" dash="2" epaisseur="0" istrace="false" traits="0" visible="true"/>
+</SEGMENT>
+<SEGMENT fictif="false" nom="" p1="B" p2="D">
+<GEOASPECTSEGMENT couleur="-16777216" dash="2" epaisseur="0" istrace="false" traits="0" visible="true"/>
+</SEGMENT>
+<OBSERVLONGUEUR apres0="" avant0="BD=" ispdependent="false" nbapres="1" nbavant="1" nom="T10" obj="[BD]" x="-2.726984126984127" y="2.9509297052154198">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVLONGUEUR>
+<POINTLIBRE nom="H" x="-8.667753642202028" y="5.75813896377736">
+<GEOASPECTPOINT affichenom="true" couleur="-234" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTLIBRE>
+<POINTLIBRE nom="I" x="-8.001927125647544" y="5.009816734618999">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTLIBRE>
+<VECTEURPTS fictif="false" nom="" p1="H" p2="I">
+<GEOASPECTLIGNE couleur="-16777216" dash="0" epaisseur="2" istrace="false" visible="true"/>
+</VECTEURPTS>
+<POINTLIBRE nom="J" x="-7.178970461461794" y="5.575873745997949">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTLIBRE>
+<VECTEURPTS fictif="false" nom="" p1="I" p2="J">
+<GEOASPECTLIGNE couleur="-16777216" dash="0" epaisseur="2" istrace="false" visible="true"/>
+</VECTEURPTS>
+<OBSERVLONGUEUR apres0="" avant0="la norme de vIJ vaut " ispdependent="false" nbapres="1" nbavant="1" nom="T11" obj="vIJ" x="-7.165817668105584" y="5.261548614309051">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVLONGUEUR>
+<OBSERVLONGUEUR apres0="" avant0="la norme de vHI vaut " ispdependent="false" nbapres="1" nbavant="1" nom="T12" obj="vHI" x="-8.873998280288083" y="5.036788007442933">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVLONGUEUR>
+<OBSERVANGLE apres0="°" avant0="angle(HIJ)=" decx="0.32671201814058914" decy="0.20183502496577432" ispdependent="true" nbapres="1" nbavant="1" nom="T13" p="I" p1="H" p2="I" p3="J" type="0">
+<GEOASPECTOBSERV couleur="-16777216" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVANGLE>
+<POINTLIBRE nom="K" x="-7.741204821682846" y="4.605247642259986">
+<GEOASPECTPOINT affichenom="true" couleur="-16777216" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="false"/>
+</POINTLIBRE>
+<BISSECTRICE fictif="false" nom="(D2)" p1="H" p2="I" p3="J">
+<GEOASPECTLIGNE couleur="-16777216" dash="0" epaisseur="2" istrace="false" visible="true"/>
+</BISSECTRICE>
+<VECTEURREP fictif="false" nom="V1" p1="H" v1="vIJ">
+<GEOASPECTLIGNE couleur="-14978025" dash="0" epaisseur="2" istrace="false" visible="false"/>
+</VECTEURREP>
+<POINTSUR accueil="(D2)" contrainte="0.0" fictif="false" nom="L" x="-7.895036723971074" y="5.892005613103044">
+<GEOASPECTPOINT affichenom="true" couleur="-16711936" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTSUR>
+<OBSERVDISTANCE apres0="" avant0="LI=" ispdependent="false" nbapres="1" nbavant="1" nom="T14" p1="L" p2="I" x="-7.433712245046049" y="5.673812439011519">
+<GEOASPECTOBSERV couleur="-16711936" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVDISTANCE>
+<POINTSUR accueil="(D2)" contrainte="0.0" fictif="false" nom="M" x="-7.88314301312279" y="5.990166900456233">
+<GEOASPECTPOINT affichenom="true" couleur="-16711936" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="true"/>
+</POINTSUR>
+<VECTEURREP fictif="false" nom="V2" p1="M" v1="vHI">
+<GEOASPECTLIGNE couleur="-16711936" dash="0" epaisseur="2" istrace="false" visible="false"/>
+</VECTEURREP>
+<VECTEURREP fictif="false" nom="V3" p1="H" v1="vIJ">
+<GEOASPECTLIGNE couleur="-16711936" dash="0" epaisseur="2" istrace="false" visible="true"/>
+</VECTEURREP>
+<OBSERVANGLE apres0="°" avant0="angle(LIH)=" decx="-0.21234749577926237" decy="0.046758693720045486" ispdependent="true" nbapres="1" nbavant="1" nom="T15" p="I" p1="L" p2="I" p3="H" type="0">
+<GEOASPECTOBSERV couleur="-16711936" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVANGLE>
+<POINTLIBRE nom="N" x="-8.011939540846203" y="5.127876061175659">
+<GEOASPECTPOINT affichenom="true" couleur="-16711936" decx="-5" decy="-7" font="Dialog" istrace="false" style="0" symbole="5" taille="12" visible="false"/>
+</POINTLIBRE>
+<OBSERVANGLE apres0="°" avant0="angle(LIJ)=" decx="0.06190203751498867" decy="0.03824162746867081" ispdependent="true" nbapres="1" nbavant="1" nom="T16" p="I" p1="L" p2="I" p3="J" type="0">
+<GEOASPECTOBSERV couleur="-16711936" font="Dialog" istrace="false" precision="2" style="0" taille="12" visible="true"/>
+</OBSERVANGLE>
+</GEOVECTOR>
+</MAIN>

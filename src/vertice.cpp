@@ -15,29 +15,25 @@ struct Node* initNode(float x, float y, int type)
     return node;
 }
 
-struct Segment* initSegment(Node *node1, Node *node2, int type)
+struct Segment* initSegment(Node *node1, Node *node2)
 {
     struct Segment *segment = new struct Segment;
     segment->node1 = node1;
     segment->node2 = node2;
-    segment->type  = type;
     segment->id    = 0;
-    segment->zone  = 0;
     segment->next  = NULL;
     segment->prev = NULL;
 
     return segment;
 }
 
-struct Element* initElement(Segment *segment1, Segment *segment2, Segment *segment3, int type)
+struct Element* initElement(Node *node1, Node *node2, Node *node3)
 {
     struct Element *element = new struct Element;
-    element->segment1 = segment1;
-    element->segment2 = segment2;
-    element->segment3 = segment3;
-    element->type  = type;
+    element->node1 = node1;
+    element->node2 = node2;
+    element->node3 = node3;
     element->id    = 0;
-    element->zone  = 0;
     element->next  = NULL;
     element->prev  = NULL;
 
@@ -46,8 +42,13 @@ struct Element* initElement(Segment *segment1, Segment *segment2, Segment *segme
 
 float getAngle(struct Segment* segment1, struct Segment* segment2)
 {
-   
-    return  atan2(segment2->node1->y - segment2->node2->y, segment2->node1->x - segment2->node2->x) - atan2(segment1->node2->y - segment1->node1->y, segment1->node2->x - segment1->node1->x);
+    float x1 = segment1->node2->x - segment1->node1->x;
+    float y1 = segment1->node2->y - segment1->node1->y;
+    float x2 = segment2->node2->x - segment2->node1->x;
+    float y2 = segment2->node2->y - segment2->node1->y;
+    float dot = x1*x2 + y1*y2;
+    float det = x1*y2 - y1*x2;
+    return atan2(det, dot);
 }
 
 void sortSegment(struct List<struct Segment> *segments)
@@ -72,7 +73,6 @@ void sortSegment(struct List<struct Segment> *segments)
             {
                 inserted = popElement(segments, element->id);
                 addElement(computed, inserted);
-                inserted->next = NULL;
                 last_computed = element;
             }
             else if(last_computed->node2->id == element->node2->id)
@@ -82,7 +82,6 @@ void sortSegment(struct List<struct Segment> *segments)
                 element->node1 = swap;
                 inserted = popElement(segments, element->id);
                 addElement(computed, inserted);
-                inserted->next = NULL;
                 last_computed = element;
                 break;
             }
@@ -94,19 +93,18 @@ void sortSegment(struct List<struct Segment> *segments)
     *segments = *computed;
     delete computed;
 
-    struct Segment *seg = segments->first;
 
-    for(int i=0; i<segments->nb; i++)
-    {
-        cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
-        seg=seg->next;
-    }
+    // for(int i=0; i<segments->nb; i++)
+    // {
+    //     cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+    //     seg=seg->next;
+    // }
 
 
-    if(travelingDirection(segments))
-        cout << "CW" << endl;
-    else
-        cout << "CCW" << endl;
+    // if(travelingDirection(segments))
+    //     cout << "CW" << endl;
+    // else
+    //     cout << "CCW" << endl;
 
 
     if(!travelingDirection(segments))
@@ -114,31 +112,31 @@ void sortSegment(struct List<struct Segment> *segments)
         reverse(segments);
 
         element = segments->first;
-        do
+        for(int i=0; i<segments->nb; i++)
         {
             swap = element->node2;
             element->node2 = element->node1;
             element->node1 = swap;
-        }while((element = element->next));
+            element = element->next;
+        }
     }
 
 
-    cout << endl << "----------------------" << endl << endl;
-
-    seg = segments->first;
-
-    for(int i=0; i<segments->nb; i++)
-    {
-        cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
-        seg=seg->next;
-    }
+    // cout << endl << "----------------------" << endl << endl;
 
 
+    // for(int i=0; i<segments->nb; i++)
+    // {
+    //     cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;
+    //     seg=seg->next;
+    // }
 
-    if(travelingDirection(segments))
-        cout << "CW" << endl;
-    else
-        cout << "CCW" << endl;
+
+
+    // if(travelingDirection(segments))
+    //     cout << "CW" << endl;
+    // else
+    //     cout << "CCW" << endl;
 
 }
 
@@ -163,21 +161,22 @@ float minAngle(struct List<struct Segment> *segments, struct Segment *segment)
 {
     float min = PI;
     float tmp = min;
-    struct Segment *seg=segments->first, *found= new Segment;
+    struct Segment *seg=segments->first, *found= NULL;
 
     for(int i=0; i<segments->nb; i++)
     {
-        tmp = getAngle(seg, seg->next);
-        if(tmp<min)
+        tmp =  PI - getAngle(seg, seg->next);
+        //cout << "angle found: " << tmp*180/PI << " between seg "<< seg->id << " and seg " << seg->next->id << endl;
+        if(tmp > 0 && tmp<min)
         {
             found = seg;
             min = tmp;
         }
+        seg = seg->next;
     }
 
     if(found)
         *segment = *found;
-
 
     return min;
 }
@@ -219,13 +218,10 @@ void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct 
     struct Segment *segment = segments->first;
     float perimeter = getPerimeter(segments);
 
-    cout << "Delta: " << perimeter/nb_points << endl;
+    //cout << "Delta: " << perimeter/nb_points << endl;
 
     for(int i=0; i< segments->nb; i++)
         segment = subdivise(segment, perimeter, nb_points, nodes, segments);
-    
-
-    cout << "fin subdivie outline" << endl;
 
 }
 
@@ -241,7 +237,7 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
     struct Node *node = NULL;
     struct Node *start = segment_->node1;
 
-    cout << "id: " << segment_->id << " => ni: " << n_segs-1 << " => delta: " << delta << " => L: " << L << endl;
+    //cout << "id: " << segment_->id << " => ni: " << n_segs-1 << " => delta: " << delta << " => L: " << L << endl;
 
 
     if(n_segs-1>0)
@@ -250,11 +246,11 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
         {
             //Node generation
             node = generateNewPointOnSegment(segment_, L, delta*(i+1));
-            cout << "new point generated:" << endl << "\tx: "<< node->x << "\ty: " << node->y << endl << endl;
+            //cout << "new point generated:" << endl << "\tx: "<< node->x << "\ty: " << node->y << endl << endl;
             addElement(nodes, node);
 
             //Segment generation
-            segment = initSegment(start, node, ORIGINAL);
+            segment = initSegment(start, node);
             insertElement(segments, segment, last_segment->id);
 
             last_segment = segment;
@@ -262,178 +258,202 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
 
         }
     
-        segment = initSegment(start, segment_->node2, ORIGINAL);
+        segment = initSegment(start, segment_->node2);
         insertElement(segments, segment, last_segment->id);
 
         delete popElement(segments, segment_->id);
     }
 
-    cout << "------------------------" << endl << endl;
+    //cout << "------------------------" << endl << endl;
 
     return last_segment->next;
 }
 
-// void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements)
-// {
+void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements)
+{
+    struct Segment *segment = new struct Segment, *seg1 = NULL, *seg2 = NULL;
+    struct Segment *generated = NULL;
+    struct Node *node = NULL;
+    float angle = 0.0f;
+    float r = 0.0f, a=0.0f, b=0.0f, x_int=0.0f, y_int=0.0f, diag1 = 0.0f, diag2 = 0.0f;
+    int state;
+    int i = 0;
 
-// }
+    do
+    {
 
+        angle = minAngle(segments, segment)*180/PI;
+        // cout << "iteration: " << i << endl;
+        // cout << "segment found: " << segment->id << endl;
+        // cout << "angle min: " << angle << endl;
 
-// /*/*void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements){
+        //switch between cases
+        if(angle < 90)
+            state = FIRST_CASE;
+        else if (angle >= 90 && angle < 120)
+            state = SECOND_CASE;
+        else if (angle >= 120)
+            state = THIRD_CASE;
 
-//     cout << "cavendish" << endl;
+        if (segments->nb == 4)
+            state = END_CASE;
 
-//     struct Segment *previous = new struct Segment;
-//     struct Segment *segment1 = new struct Segment;
-//     struct Segment *segment2 = new struct Segment;
-//     struct Segment *next = new struct Segment;
+        switch(state)
+        {
+            case FIRST_CASE:
+                // cout << "first" << endl;
+                //add new element
+                addElement(elements, initElement(segment->node1, segment->node2, segment->next->node2));
+                //generate new segment between first node of first segment and second node of second segment
+                generated = initSegment(segment->node1, segment->next->node2);
+                insertElement(segments, generated, segment->id);
+                seg1 = segments->first;
+                // for(int i=0; i<segments->nb; i++)
+                // {
+                //     cout << "segment: " << seg1->id << endl << "\tnode 1: "<< seg1->node1->id << endl << "\tnode 2: "<< seg1->node2->id << endl << endl;
+                //     seg1=seg1->next;
+                // }
+                //remove old segment to create new computed outline
+                seg1 = popElement(segments, segment->id);
+                seg2 = popElement(segments, segment->next->id);
 
-//     //int nb_segments = 0;
+                break;
+            case SECOND_CASE:
+                // cout << "second" << endl;
+                //compute NN* distance
+                r =  (getDistance(segment->prev)+2*(getDistance(segment)+getDistance(segment->next))+getDistance(segment->next->next))/6.0;
+                //a = r/l1
+                a = r/getDistance(segment);
+                //b = r/l2
+                b = r/getDistance(segment->next);
+                //x_d = r/l1*x_a + r/l2*x_c + x_b*(1-r/l1-r/l2) 
+                x_int = a*segment->node1->x + b*segment->next->node2->x + (segment->node2->x)*(1-a-b);
+                //x_d = r/l1*x_a + r/l2*x_c + x_b*(1-r/l1-r/l2) 
+                y_int = a*segment->node1->y + b*segment->next->node2->y + (segment->node2->y)*(1-a-b);
 
-//     float angle_min = 0.0;
+/*                cout << "N-2->N-1: " << getDistance(segment->prev) << endl;
+                cout << "N-1->N: " << getDistance(segment) << endl;
+                cout << "N->N+1: " << getDistance(segment->next) << endl;
+                cout << "N+1->N+2: " << getDistance(segment->prev) << endl;
+                cout << "a: " << a << endl;
+                cout << "b: " << b << endl;
+                cout << "r: " << r << endl;
+                cout << "generated point (" << x_int << ", " << y_int << ")" << endl;*/
 
-//     angle_min = minAngle(segments, previous, segment1, segment2, next);
-//     cout << angle_min*180/PI << endl;
+                node = initNode(x_int, y_int, ORIGINAL);
 
-//     ///////////////////////////////////////// FIN //////////////////////////////////////
-//     if (segments->nb == 4){
-//         struct Segment* temp_seg1 = initSegment(segment1->node1, segment2->node2, ORIGINAL);
-//         struct Segment* temp_seg2 = initSegment(segment1->node2, next->node2, ORIGINAL);
-//         //struct Segment* last_seg = NULL;
-//         float l = getDistance(temp_seg1);
-//         float r = getDistance(temp_seg2);
+                //append new node
+                addElement(nodes, node);
 
-//         if (r > l){
-//             last_seg = temp_seg2;
-//        }
-//        else last_seg = temp_seg1;
+                //generate 2 new elements
+                addElement(elements, initElement(segment->node1, segment->node2, node));
+                addElement(elements, initElement(segment->node2, segment->next->node2, node));
 
-// /*       struct Element* last_element1 = initElement(segment1, segment2, last_seg, ORIGINAL);
-//        struct Element* last_element2 = initElement(previous, next, last_seg, ORIGINAL);
+                //generate new outline
+                generated = initSegment(segment->node1, node);
+                insertElement(segments, generated, segment->prev->id);
 
-// /*        addElement(elements, last_element1);
-//         addElement(elements, last_element2);*/
-//         popElement(segments, segment1->id);
-//         popElement(segments, segment2->id);
-//         popElement(segments, previous->id);
-//         popElement(segments, next->id);
-//         //segments->nb = 0;
-       
-//         cout << "i m here" << endl;
+                generated = initSegment(node, segment->next->node2);
+                insertElement(segments, generated, segment->id);
 
-//         return;
+                //remove old segment to create new computed outline
+                seg1 = popElement(segments, segment->id);
+                seg2 = popElement(segments, segment->next->id);
 
-//     }
+                delete seg1;
+                delete seg2;
+                break;
+            case THIRD_CASE:
+                // cout << "third" << endl;
+                //compute NN* distance
+                r =  getDistance(segment)<getDistance(segment->next)?getDistance(segment):getDistance(segment->next);
+                //a = r/l1
+                a = r/getDistance(segment);
+                //b = r/l2
+                b = r/getDistance(segment->next);
+                //x_d = r/l1*x_a + r/l2*x_c + x_b*(1-r/l1-r/l2) 
+                x_int = a*segment->node1->x + b*segment->next->node2->x + (segment->node2->x)*(1-a-b);
+                //x_d = r/l1*x_a + r/l2*x_c + x_b*(1-r/l1-r/l2) 
+                y_int = a*segment->node1->y + b*segment->next->node2->y + (segment->node2->y)*(1-a-b);
 
-    
-
-//     if (segments->nb > 4){
-
-//     ///////////////////////////////////////// PREMIER CAS //////////////////////////////////////
-//     if (angle_min < (PI)){
-//         struct Segment* new_seg = initSegment(segment1->node1, segment2->node2, ORIGINAL);
-//         struct Element* new_element = initElement(segment1, segment2, new_seg, ORIGINAL);
-//         //addElement(segments, new_seg);
-//         popElement(segments, segment1->id);
-//         popElement(segments, segment2->id);
-//         insertElement(segments, new_seg, previous->id);
-//         addElement(elements, new_element);
-
-
-//         cout << "first" << endl;
-//     }
-
-//     ///////////////////////////////////////// SECOND CAS //////////////////////////////////////
-
-//     if ((angle_min>=(PI)) && (angle_min<(2*PI/3))){
-//         struct Node* node_1 = segment2->node1;
-//         struct Node* node_3 = NULL;
-//         float x_1 = node_1->x;
-//         float y_1 = node_1->y;
-//         float x_3 = 0.0;
-//         float y_3 = 0.0;
-
-//         float x_int = node_1->x + 10;
-//         float y_int = node_1->y;
-//         struct Node* node_int = initNode(x_int, y_int, ORIGINAL);
-//         struct Segment* intermediaire = initSegment(node_1, node_int, ORIGINAL);
-
-//         float angle_int = (angle_min/2 ) + getAngle(intermediaire, segment2);
-
-//         float r = (1/6)*(getDistance(previous)+2*(getDistance(segment1)+getDistance(segment2))+getDistance(next));
-
-//         x_3 = x_1 + r*cos(angle_int);
-//         y_3 = y_1 + r*sin(angle_int);
-
-//         node_3 = initNode(x_3, y_3, ORIGINAL);
-
-//         addElement(nodes, node_3);
-
-//         struct Segment* new_seg1 = initSegment(node_1, node_3, ORIGINAL);
-//         struct Segment* new_seg2 = initSegment(segment1->node1, node_3, ORIGINAL);
-//         struct Segment* new_seg3 = initSegment(segment2->node2, node_3,  ORIGINAL);
-//         struct Element* new_element1 = initElement(segment1, new_seg2, new_seg1, ORIGINAL);
-//         struct Element* new_element2 = initElement(new_seg1, new_seg3, segment2, ORIGINAL);
-
-//         popElement(segments, segment1->id);
-//         popElement(segments, segment2->id);
-//         insertElement(segments, new_seg2, previous->id);
-//         insertElement(segments, new_seg3, new_seg2->id);
-//         addElement(elements, new_element1);
-//         addElement(elements, new_element2);
-
-//         cout << "second" << endl;
-//     }
-
-//     ///////////////////////////////////////// TROISIEME CAS //////////////////////////////////////
-
-//     if (angle_min >= (2*PI/3)){
-
-//         float r = getDistance(segment1);
-//         float t = getDistance(segment2);
-//         float x_3 = 0.0;
-//         float y_3 = 0.0;
-
-//         struct Segment* equi = NULL;
-//         struct Node* node_3 = NULL;
-
-//         if (r > t){
-//             equi = segment2;
-//         }
-//         else equi = segment1;
-
-//         struct Node* node_1 = equi->node1;
-
-//         float x_int = node_1->x + 10;
-//         float y_int = node_1->y;
-//         struct Node* node_int = initNode(x_int, y_int, ORIGINAL);
-
-//         struct Segment* intermediaire = initSegment(node_1, node_int, ORIGINAL);
-//         float angle_int = (angle_min/3 ) + getAngle(intermediaire, equi);
-
-//         x_3 = equi->node1->x + r*cos(angle_int);
-//         y_3 = equi->node1->y + r*sin(angle_int);
-
-//         node_3 = initNode(x_3, y_3, ORIGINAL);
-
-//         addElement(nodes, node_3);
-
-//         struct Segment* new_seg1 = initSegment(equi->node1, node_3,   ORIGINAL);
-//         struct Segment* new_seg2 = initSegment(equi->node2, node_3, ORIGINAL);
-//         struct Element* new_element1 = initElement(segment1, new_seg1, new_seg2, ORIGINAL);
-
-//         popElement(segments, segment1->id);
-//         insertElement(segments, new_seg1, previous->id);
-//         insertElement(segments, new_seg2, new_seg1->id);
-//         addElement(elements, new_element1);
-
-//         cout << "third" << endl;
+                // cout << "N-1->N: " << getDistance(segment) << endl;
+                // cout << "N->N+1: " << getDistance(segment->next) << endl;
+                // cout << "a: " << a << endl;
+                // cout << "b: " << b << endl;
+                // cout << "r: " << r << endl;
+                // cout << "generated point (" << x_int << ", " << y_int << ")" << endl;
 
 
-//     }
+                seg1 = segments->first;
+                for(int i=0; i<segments->nb; i++)
+                {
+                    // cout << "segment: " << seg1->id << endl << "\tnode 1: "<< seg1->node1->id << endl << "\tnode 2: "<< seg1->node2->id << endl << endl;
+                    seg1=seg1->next;
+                }
 
+                // cout << "angle between " << segment->node1->id << "->" << segment->node2->id << " and " << segment->next->node1->id << "->" << segment->next->node2->id << endl;
 
+                node = initNode(x_int, y_int, ORIGINAL);
 
-//     }    
+                //append new node
+                addElement(nodes, node);
 
-// }*/*/
+                //generate 2 new elements
+                addElement(elements, initElement(segment->node1, segment->node2, node));
+                addElement(elements, initElement(segment->node2, segment->next->node2, node));
+
+                // cout << "generated element: [" << segment->node1->id << ", " << segment->node2->id << ", " << node->id << "]" << endl;
+                // cout << "generated element: [" << segment->node2->id << ", " << segment->next->node2->id << ", " << node->id << "]" << endl;
+
+                //generate new outline
+                seg1 = initSegment(segment->node1, node);
+                insertElement(segments, seg1, segment->prev->id);
+
+                // cout << "generated segment => node1: " << seg1->node1->id << ", node2: " << seg1->node2->id << endl;
+
+                seg2 = initSegment(node, segment->next->node2);
+                insertElement(segments, seg2, segment->id);
+
+                // cout << "generated segment => node1: " << seg2->node1->id << ", node2: " << seg2->node2->id << endl;
+
+                //remove old segment to create new computed outline
+                seg1 = popElement(segments, segment->id);
+                seg2 = popElement(segments, segment->next->id);
+                // cout << "deleted segment => node1: " << seg1->node1->id << ", node2: " << seg1->node2->id << endl;
+                // cout << "deleted segment => node1: " << seg2->node1->id << ", node2: " << seg2->node2->id << endl;
+                delete seg1;
+                delete seg2;
+                break;
+            case END_CASE:
+                //get 2 diagonales
+                diag1 = getDistance(initSegment(segment->node1, segment->next->node2));
+                diag2 = getDistance(initSegment(segment->node2, segment->prev->node2));
+
+                if(diag1>diag2)
+                {
+                    // cout << "case 1" << endl;
+                    addElement(elements, initElement(segment->node1, segment->node2, segment->next->next->node2));
+                    addElement(elements, initElement(segment->node2, segment->next->node2, segment->next->next->node2));
+                }
+                else
+                {
+                    // cout << "case 2" << endl;
+                    // cout << "generated element: [" << segment->node1->id << ", " << segment->node2->id << ", " << segment->next->node2->id << "]" << endl;
+                    // cout << "generated element: [" << segment->node2->id << ", " << segment->next->node2->id << ", " << segment->prev->node1->id << "]" << endl;
+
+                    addElement(elements, initElement(segment->node1, segment->node2, segment->next->node2));
+                    addElement(elements, initElement(segment->node1, segment->next->node2, segment->prev->node1));
+                }
+                popElement(segments, segments->first->id);
+                popElement(segments, segments->first->id);
+                popElement(segments, segments->first->id);
+                popElement(segments, segments->first->id);
+                break;
+            default:
+                break;
+        }
+        i++;
+        //cout << "-------------" << endl;
+    }while((segments->nb));
+
+}
