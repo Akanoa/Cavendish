@@ -188,21 +188,31 @@ void insertElement(struct List<T> *list, T* element_, int id)
 
 }
 
-
-//nodes stuff
+//initilises a node with (x, y) cartesians coordinates
 struct Node* initNode(float x, float y, int type);
-
-//segments stuff
+//initilises a segment compounded of node1 and node2
 struct Segment* initSegment(Node *node1, Node *node2);
+//initilises a triangular element compounded of node1, node2 and node3
 struct Element* initElement(Node *node1, Node *node2, Node *node3);
+//retrieves segment's norm
 float getDistance(struct Segment *segment);
+//retrieves segment's norm declares with 2 nodes
 float getDistance(struct Node *node1, struct Node *node2);
+//retrives polygon perimeter compounded of n segments
 float getPerimeter(struct List<struct Segment> *segments);
+//from a polygon generates another polygon with n subdivisions
 void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct Node> *nodes, int n);
+//cuts a segment in n parts
 struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments);
+//reorganises a list of segment to make a polygon
 void sortSegment(struct List<struct Segment> *segments);
+//determines if polygon turn in couter-clockwise or clockwise direction
 bool travelingDirection(struct List<struct Segment> *segments);
+//generates a new node along the segment using a distance
 struct Node* generateNewPointOnSegment(struct Segment *segment, float length, float distance);
+//computes angle between two segments in CW direction
 float getAngle(struct Segment* segment1, struct Segment* segment2);
+//Meshes a geometry using cavendish algorithm
 void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements);
+//retrieves the smallest angle in a polygon, segment initialises as first segment of min angle
 float minAngle(struct List<struct Segment> *segments, struct Segment *segment);

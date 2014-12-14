@@ -162,13 +162,8 @@ int main(int argc, char **argv)
 
     sortSegment(segments);
 
-    // cout << "segments initiaux " << segments->nb << endl;
 
     subdiviseOutline(segments, nodes, nb_points_wanted);
-
-    // CAVENDISH
-
-    // cout << "segments finaux " << segments->nb << endl;
 
     if(only_outline)
     {
@@ -183,10 +178,6 @@ int main(int argc, char **argv)
     {
         Cavendish(segments, nodes, elements);
     }
-    // cout << nodes->nb << endl;
-    // cout << segments->nb << endl;
-    // cout << elements->nb << endl;
-
 
     //generate list of points
     tmp = nodes->first;
