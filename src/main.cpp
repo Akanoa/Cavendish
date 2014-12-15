@@ -10,7 +10,7 @@
 #include "utils.h"
 
 
-enum {HEADER, NB_POINT, POINT, COURBE, SEGMENT, END};
+enum {HEADER, NB_POINT, POINT, COURBE, END};
 enum {LINUX, WINDOW};
 
 const char *sep =
@@ -27,7 +27,8 @@ int main(int argc, char **argv)
     char src_[100], dst_[100];
     int nb_points_wanted = 20;
     bool only_outline = false;
-    sprintf(src_, "..%s%s%s%s", sep, "docs", sep, "MPmaille.geo");
+    float angle = 1.0;
+    sprintf(src_, "..%s%s%s%s", sep, "docs", sep, "polygon.geo");
     sprintf(dst_, "..%s%s%s%s", sep, "results", sep, "maillage.cal");
 
     string src(src_), dst(dst_);
@@ -47,17 +48,22 @@ int main(int argc, char **argv)
 
     if(argc > 3)
         nb_points_wanted = atoi(argv[3]);
-    if(argc > 4 && !strcmp(argv[4], "true"))
+
+    if(argc > 4)
+        angle = atof(argv[4]);
+
+    if(argc > 5 && !strcmp(argv[5], "true"))
         only_outline = true;
 
     cout << "########################################" << endl;
     cout << "#            ENIB Meshing              #" << endl;
     cout << "########################################" << endl << endl;
     cout << "---------------------------------------------" << endl;
-    cout << "usage: cavendish [src] [dst] [outiline_subdivions] [only_outline]" << endl << endl;
-    cout << "- src : RDM6 .geo file used as original outline geometry" << endl;
-    cout << "- dst : RDM6 .cal file, output file " << endl;
+    cout << "usage: cavendish [src] [dst] [outiline_subdivions] [angle] [only_outline]" << endl << endl;
+    cout << "- src                 : RDM6 .geo file used as original outline geometry" << endl;
+    cout << "- dst                 : RDM6 .cal file, output file " << endl;
     cout << "- outiline_subdivions : approximated number of outiline subdivions wanted" << endl;
+    cout << "- angle               : angle size between two in case of arc discretisation" << endl;
     cout << "- only_outline        : if true, generates only outline subdivised" << endl;
     cout << "---------------------------------------------" << endl << endl;
     cout << "Input file:          " << src << endl;
@@ -72,6 +78,8 @@ int main(int argc, char **argv)
     int nb_elements(0);
 
     string line;
+    string startwith;
+    char startwith_tmp[100] = ""; 
     vector<string> lines;
     vector<string> original_points;
     vector<string> points;
@@ -85,10 +93,11 @@ int main(int argc, char **argv)
 
     struct List<struct Node> *nodes = initList<struct Node>();
     struct List<struct Segment> *segments = initList<struct Segment>();
+    struct List<struct Element> *arcs = initList<struct Element>();
     struct List<struct Element> *elements = initList<struct Element>();
     struct Node *node = NULL;
     struct Segment *segment = NULL;
-
+    struct Element *arc = NULL;
 
     //parsing
     while(!input.eof())
@@ -109,7 +118,7 @@ int main(int argc, char **argv)
             break;
         case POINT:
             if(!line.compare("$courbes"))
-                state = SEGMENT;
+                state = COURBE;
             else
             {
                 float x, y;
@@ -118,17 +127,36 @@ int main(int argc, char **argv)
                 addElement<struct Node>(nodes, node);
             }
             break;
-        case SEGMENT:
+        case COURBE:
             if(!line.compare("//// fin"))
                 state = END;
             else
             {
-                int node_id1, node_id2;
-                sscanf(line.c_str(), "%*s %d %d %*s", &node_id1, &node_id2);
-                segment = initSegment(getElement<struct Node>(nodes, node_id1), getElement<struct Node>(nodes, node_id2));
-                addElement<struct Segment>(segments, segment);
+                sscanf(line.c_str(), "%s", startwith_tmp);
+                startwith = startwith_tmp;
+                if(!startwith.compare("segment"))
+                {
+                    int node_id1, node_id2;
+                    sscanf(line.c_str(), "%*s %d %d %*s", &node_id1, &node_id2);
+                    segment = initSegment(getElement<struct Node>(nodes, node_id1), getElement<struct Node>(nodes, node_id2));
+                    addElement<struct Segment>(segments, segment);
+                }
+                else if (!startwith.compare("arc"))
+                {
+                    cout << "arc" << endl;
+                    int node_id1=0, node_id2=0;
+                    char cx_s[20], cy_s[20];
+                    float cx=0.0, cy=0.0;
+                    sscanf(line.c_str(), "%*s %d %d  %s  %s %*s", &node_id1, &node_id2, cx_s, cy_s);
+                    cx = atof((const char*)cx_s);
+                    cy = atof((const char*)cy_s);
+                    arc = initElement(getElement(nodes, node_id1), getElement(nodes, node_id2), initNode(cx, cy, ORIGINAL));
+
+                    addElement(arcs, arc);
+                }
             }
             break;
+
         default:
             break;
         }
@@ -152,7 +180,6 @@ int main(int argc, char **argv)
     i=1;
     for(struct Segment *seg = segments->first; seg!=segments->last; seg=seg->next)
     {
-        seg->zone = i;
         sprintf(line_tmp, "%3d%4d%4d", i, seg->node1->id, seg->node2->id);
         str_tmp = line_tmp;
         original_segments.push_back(str_tmp);
@@ -160,7 +187,9 @@ int main(int argc, char **argv)
     }
 
 
-    sortSegment(segments);
+    sortSegment(segments, arcs);
+
+    subdiviseArc(segments, arcs , angle);
 
 
     subdiviseOutline(segments, nodes, nb_points_wanted);

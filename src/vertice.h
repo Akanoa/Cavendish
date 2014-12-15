@@ -23,10 +23,9 @@ struct Segment
     Node *node1;
     Node *node2;
     int id;
-    int zone;
-    int type;
     struct Segment *next;
     struct Segment *prev;
+    int tag;
 };
 
 struct Element
@@ -35,8 +34,6 @@ struct Element
     Node *node2;
     Node *node3;
     int id;
-    int zone;
-    int type;
     struct Element *next;
     struct Element *prev;
 };
@@ -200,12 +197,14 @@ float getDistance(struct Segment *segment);
 float getDistance(struct Node *node1, struct Node *node2);
 //retrives polygon perimeter compounded of n segments
 float getPerimeter(struct List<struct Segment> *segments);
+//subdivise an arc in segment
+void subdiviseArc(struct List<struct Segment> *segments, struct List<Element> *arcs, float angle);
 //from a polygon generates another polygon with n subdivisions
 void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct Node> *nodes, int n);
 //cuts a segment in n parts
 struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments);
 //reorganises a list of segment to make a polygon
-void sortSegment(struct List<struct Segment> *segments);
+void sortSegment(struct List<struct Segment> *segments, struct List<struct Element> *arcs);
 //determines if polygon turn in couter-clockwise or clockwise direction
 bool travelingDirection(struct List<struct Segment> *segments);
 //generates a new node along the segment using a distance

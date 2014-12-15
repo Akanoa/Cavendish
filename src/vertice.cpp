@@ -23,9 +23,11 @@ struct Segment* initSegment(Node *node1, Node *node2)
     segment->id    = 0;
     segment->next  = NULL;
     segment->prev = NULL;
+    segment->tag = 0;
 
     return segment;
 }
+
 
 struct Element* initElement(Node *node1, Node *node2, Node *node3)
 {
@@ -51,7 +53,7 @@ float getAngle(struct Segment* segment1, struct Segment* segment2)
     return atan2(det, dot);
 }
 
-void sortSegment(struct List<struct Segment> *segments)
+void sortSegment(struct List<struct Segment> *segments, struct List<struct Element> *arcs)
 {
     //get how many segments must be sorted
     int left_segments = segments->nb-1;
@@ -60,6 +62,15 @@ void sortSegment(struct List<struct Segment> *segments)
     struct Segment *inserted = NULL;
     struct Node *swap = NULL; 
     struct Segment *last_computed = segments->first;
+    struct Element *arc = arcs->first;
+
+    //add potentials arcs
+    for(int i=0; i< arcs->nb; i++)
+    {
+        inserted = initSegment(arc->node1, arc->node2);
+        addElement(segments, inserted);
+        inserted->tag = 1;
+    }
 
     inserted = popElement(segments, segments->first->id);
     addElement(computed, inserted);
@@ -74,6 +85,7 @@ void sortSegment(struct List<struct Segment> *segments)
                 inserted = popElement(segments, element->id);
                 addElement(computed, inserted);
                 last_computed = element;
+                break;
             }
             else if(last_computed->node2->id == element->node2->id)
             {
@@ -194,10 +206,31 @@ void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct 
 
 }
 
+void subdiviseArc(struct List<struct Segment> *segments, struct List<Element> *arcs, float angle)
+{
+    struct Element *arc = arcs->first;
+    struct Segment *seg = segments->first;
+    struct Segment *inserted = NULL;
+
+    for(int i=0; i < segments->nb; i++)
+    {
+        if(seg->tag)
+        {
+            inserted = initSegment(arc->node1, arc->node2);
+            insertElement(segments, inserted, seg->prev->id);
+            popElement(segments, seg->id);
+            arc = arc->next;
+            seg = inserted;
+        }
+        seg = seg->next;
+    }
+}
+
+
 struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, struct List<struct Node> *nodes, struct List<struct Segment> *segments)
 {
     float L = getDistance(segment_);
-    int n_segs = (int)ceil(L*n/perimiter);
+    int n_segs = (int)round(L*n/perimiter);
     float delta = L/n_segs;
 
     struct Segment *segment = NULL;
