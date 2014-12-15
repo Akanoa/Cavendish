@@ -183,11 +183,13 @@ struct Node* generateNewPointOnSegment(struct Segment *segment, float length, fl
 
 void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct Node> *nodes, int n)
 {
-    int nb_points = n - segments->nb;
+    int nb_points = n;
     struct Segment *segment = segments->first;
     float perimeter = getPerimeter(segments);
 
-    for(int i=0; i< segments->nb; i++)
+    int nb_segment = segments->nb; 
+
+    for(int i=0; i< nb_segment; i++)
         segment = subdivise(segment, perimeter, nb_points, nodes, segments);
 
 }
@@ -228,7 +230,7 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
         delete popElement(segments, segment_->id);
     }
 
-    return last_segment->next;
+    return last_segment->next->next;
 }
 
 void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements)
