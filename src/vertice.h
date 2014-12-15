@@ -213,6 +213,6 @@ struct Node* generateNewPointOnSegment(struct Segment *segment, float length, fl
 //computes angle between two segments in CW direction
 float getAngle(struct Segment* segment1, struct Segment* segment2);
 //Meshes a geometry using cavendish algorithm
-void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements);
+bool Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements);
 //retrieves the smallest angle in a polygon, segment initialises as first segment of min angle
 float minAngle(struct List<struct Segment> *segments, struct Segment *segment);

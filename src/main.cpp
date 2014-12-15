@@ -165,6 +165,8 @@ int main(int argc, char **argv)
 
     subdiviseOutline(segments, nodes, nb_points_wanted);
 
+    bool ok = true;
+
     if(only_outline)
     {
         struct Segment *seg = segments->first;
@@ -176,7 +178,15 @@ int main(int argc, char **argv)
     }
     else
     {
-        Cavendish(segments, nodes, elements);
+        ok = Cavendish(segments, nodes, elements);
+    }
+
+    //stop all cavendish had crashed
+    if(!ok)
+    {
+        cout << "Sorry, but your paremeters inputed, could not generate a convenable meshing :<" << endl;
+        cout << "Try another to reduce number of subdivions for example..." << endl;
+        exit(1);
     }
 
     //generate list of points

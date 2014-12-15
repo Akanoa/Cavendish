@@ -233,7 +233,7 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
     return last_segment->next->next;
 }
 
-void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements)
+bool Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements)
 {
     struct Segment *segment = new struct Segment, *seg1 = NULL, *seg2 = NULL;
     struct Segment *generated = NULL;
@@ -253,8 +253,10 @@ void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *
             state = FIRST_CASE;
         else if (angle >= 90 && angle < 120)
             state = SECOND_CASE;
-        else if (angle >= 120)
+        else if (angle >= 120 && angle < 180)
             state = THIRD_CASE;
+        else if (angle>=180)
+            return false;
 
         if (segments->nb == 4)
             state = END_CASE;
@@ -262,6 +264,7 @@ void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *
         switch(state)
         {
             case FIRST_CASE:
+                // cout << "first" << endl;
                 //add new element
                 addElement(elements, initElement(segment->node1, segment->node2, segment->next->node2));
                 //generate new segment between first node of first segment and second node of second segment
@@ -378,5 +381,7 @@ void Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *
         }
         i++;
     }while((segments->nb));
+
+    return true;
 
 }
