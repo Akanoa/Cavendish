@@ -53,6 +53,11 @@ float getAngle(struct Segment* segment1, struct Segment* segment2)
     return atan2(det, dot);
 }
 
+// float getAngle(struct Segment* segment)
+// {
+//     return atan2(segment->node1->x)
+// }
+
 void sortSegment(struct List<struct Segment> *segments, struct List<struct Element> *arcs)
 {
     //get how many segments must be sorted
@@ -70,6 +75,7 @@ void sortSegment(struct List<struct Segment> *segments, struct List<struct Eleme
         inserted = initSegment(arc->node1, arc->node2);
         addElement(segments, inserted);
         inserted->tag = 1;
+        left_segments++;
     }
 
     inserted = popElement(segments, segments->first->id);
@@ -206,16 +212,20 @@ void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct 
 
 }
 
-void subdiviseArc(struct List<struct Segment> *segments, struct List<Element> *arcs, float angle)
+void subdiviseArc(struct List<struct Segment> *segments, struct List<Element> *arcs, float gamma)
 {
     struct Element *arc = arcs->first;
     struct Segment *seg = segments->first;
     struct Segment *inserted = NULL;
+    float beta1=0.0f, beta2=0.0f;
+
 
     for(int i=0; i < segments->nb; i++)
     {
         if(seg->tag)
         {
+
+            cout << "" << endl;
             inserted = initSegment(arc->node1, arc->node2);
             insertElement(segments, inserted, seg->prev->id);
             popElement(segments, seg->id);
@@ -266,19 +276,23 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
     return last_segment->next->next;
 }
 
-bool Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements)
+bool Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements, int iter)
 {
-    struct Segment *segment = new struct Segment, *seg1 = NULL, *seg2 = NULL;
+    struct Segment *segment = new struct Segment, *seg1 = NULL, *seg2 = NULL, *seg=NULL;
     struct Segment *generated = NULL;
     struct Node *node = NULL;
     float angle = 0.0f;
     float r = 0.0f, a=0.0f, b=0.0f, x_int=0.0f, y_int=0.0f, diag1 = 0.0f, diag2 = 0.0f;
+    float x_a=0.0f, y_a=0.0f, x_b=0.0f, y_b=0.0f, x_d =0.0f, y_d=0.0f;
     int state;
     int i = 0;
 
+    float ratio = sqrt(3)/2.0;
+
     do
     {
-
+        if(i == iter && iter>0)
+            return true;
         angle = minAngle(segments, segment)*180/PI;
 
         //switch between cases
@@ -348,21 +362,20 @@ bool Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *
             case THIRD_CASE:
                 // cout << "third" << endl;
                 //compute NN* distance
-                r =  getDistance(segment)<getDistance(segment->next)?getDistance(segment):getDistance(segment->next);
-                //a = r/l1
-                a = r/getDistance(segment);
-                //b = r/l2
-                b = r/getDistance(segment->next);
-                //x_d = r/l1*x_a + r/l2*x_c + x_b*(1-r/l1-r/l2) 
-                x_int = a*segment->node1->x + b*segment->next->node2->x + (segment->node2->x)*(1-a-b);
-                //x_d = r/l1*x_a + r/l2*x_c + x_b*(1-r/l1-r/l2) 
-                y_int = a*segment->node1->y + b*segment->next->node2->y + (segment->node2->y)*(1-a-b);
+                seg =  getDistance(segment)<getDistance(segment->next)?segment:segment->next;
 
-                seg1 = segments->first;
-                for(int i=0; i<segments->nb; i++)
-                {
-                    seg1=seg1->next;
-                }
+                x_a = seg->node1->x;
+                x_b = seg->node2->x;
+                y_a = seg->node1->y;
+                y_b = seg->node2->y;
+
+                x_d = (x_a + x_b)/2.0;
+                y_d = (y_a + y_b)/2.0;
+
+                a = getDistance(seg);
+
+                x_int = ratio*(y_a - y_b) + x_d;
+                y_int = ratio*(x_b - x_a) + y_d;
 
                 node = initNode(x_int, y_int, ORIGINAL);
 

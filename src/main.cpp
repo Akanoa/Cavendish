@@ -26,6 +26,7 @@ int main(int argc, char **argv)
 {
     char src_[100], dst_[100];
     int nb_points_wanted = 20;
+    int iter = 0;
     bool only_outline = false;
     float angle = 1.0;
     sprintf(src_, "..%s%s%s%s", sep, "docs", sep, "polygon.geo");
@@ -52,18 +53,22 @@ int main(int argc, char **argv)
     if(argc > 4)
         angle = atof(argv[4]);
 
-    if(argc > 5 && !strcmp(argv[5], "true"))
+    if(argc > 5)
+        iter = atoi(argv[5]);
+
+    if(argc > 6 && !strcmp(argv[6], "true"))
         only_outline = true;
 
     cout << "########################################" << endl;
     cout << "#            ENIB Meshing              #" << endl;
     cout << "########################################" << endl << endl;
     cout << "---------------------------------------------" << endl;
-    cout << "usage: cavendish [src] [dst] [outiline_subdivions] [angle] [only_outline]" << endl << endl;
+    cout << "usage: cavendish [src] [dst] [outiline_subdivions] [angle] [nb_iter] [only_outline]" << endl << endl;
     cout << "- src                 : RDM6 .geo file used as original outline geometry" << endl;
     cout << "- dst                 : RDM6 .cal file, output file " << endl;
     cout << "- outiline_subdivions : approximated number of outiline subdivions wanted" << endl;
     cout << "- angle               : angle size between two in case of arc discretisation" << endl;
+    cout << "- nb_iter             : how many iteration" << endl;
     cout << "- only_outline        : if true, generates only outline subdivised" << endl;
     cout << "---------------------------------------------" << endl << endl;
     cout << "Input file:          " << src << endl;
@@ -143,7 +148,6 @@ int main(int argc, char **argv)
                 }
                 else if (!startwith.compare("arc"))
                 {
-                    cout << "arc" << endl;
                     int node_id1=0, node_id2=0;
                     char cx_s[20], cy_s[20];
                     float cx=0.0, cy=0.0;
@@ -186,11 +190,9 @@ int main(int argc, char **argv)
         i++;
     }
 
-
     sortSegment(segments, arcs);
 
     subdiviseArc(segments, arcs , angle);
-
 
     subdiviseOutline(segments, nodes, nb_points_wanted);
 
@@ -207,7 +209,7 @@ int main(int argc, char **argv)
     }
     else
     {
-        ok = Cavendish(segments, nodes, elements);
+        ok = Cavendish(segments, nodes, elements, iter);
     }
 
     //stop all cavendish had crashed
