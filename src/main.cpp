@@ -26,6 +26,7 @@ int main(int argc, char **argv)
 {
     char src_[100], dst_[100];
     int nb_points_wanted = 20;
+    int iter = 0;
     bool only_outline = false;
     float angle = 1.0;
     sprintf(src_, "..%s%s%s%s", sep, "docs", sep, "polygon.geo");
@@ -52,18 +53,22 @@ int main(int argc, char **argv)
     if(argc > 4)
         angle = atof(argv[4]);
 
-    if(argc > 5 && !strcmp(argv[5], "true"))
+    if(argc > 5)
+        iter = atoi(argv[5]);
+
+    if(argc > 6 && !strcmp(argv[6], "true"))
         only_outline = true;
 
     cout << "########################################" << endl;
     cout << "#            ENIB Meshing              #" << endl;
     cout << "########################################" << endl << endl;
     cout << "---------------------------------------------" << endl;
-    cout << "usage: cavendish [src] [dst] [outiline_subdivions] [angle] [only_outline]" << endl << endl;
+    cout << "usage: cavendish [src] [dst] [outiline_subdivions] [angle] [nb_iter] [only_outline]" << endl << endl;
     cout << "- src                 : RDM6 .geo file used as original outline geometry" << endl;
     cout << "- dst                 : RDM6 .cal file, output file " << endl;
     cout << "- outiline_subdivions : approximated number of outiline subdivions wanted" << endl;
     cout << "- angle               : angle size between two in case of arc discretisation" << endl;
+    cout << "- nb_iter             : how many iteration" << endl;
     cout << "- only_outline        : if true, generates only outline subdivised" << endl;
     cout << "---------------------------------------------" << endl << endl;
     cout << "Input file:          " << src << endl;
@@ -143,7 +148,6 @@ int main(int argc, char **argv)
                 }
                 else if (!startwith.compare("arc"))
                 {
-                    cout << "arc" << endl;
                     int node_id1=0, node_id2=0;
                     char cx_s[20], cy_s[20];
                     float cx=0.0, cy=0.0;
@@ -153,6 +157,8 @@ int main(int argc, char **argv)
                     arc = initElement(getElement(nodes, node_id1), getElement(nodes, node_id2), initNode(cx, cy, ORIGINAL));
 
                     addElement(arcs, arc);
+
+                    cout << "arc" << endl;
                 }
             }
             break;
@@ -186,13 +192,56 @@ int main(int argc, char **argv)
         i++;
     }
 
+    struct Segment *seg = NULL;
+
+    // seg = segments->first;
+    // for(int i=0; i<segments->nb; i++)
+    // {       
+    //     cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << endl << endl;       
+    //     seg=seg->next;
+    // }
+
+    // cout << "-----------------------------" << endl;
 
     sortSegment(segments, arcs);
 
-    subdiviseArc(segments, arcs , angle);
+    // seg = segments->first;
+    // for(int i=0; i<segments->nb; i++)
+    // {       
+    //     cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << "\ttag: "<< seg->tag << endl << endl;
+    //     seg=seg->next;
+    // }
 
+    cout << "-----------------------------" << endl;
+
+    subdiviseArc(segments, nodes, arcs , angle);
+
+    seg = segments->first;
+    for(int i=0; i<segments->nb; i++)
+    {       
+        cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << "\ttag: "<< seg->tag << endl << endl;
+        seg=seg->next;
+    }
+
+    // tmp = nodes->first;
+    // for (int i=0; i< nodes->nb; i++)
+    // {
+    //     cout << "node " << tmp->id << "\t tag: " << tmp->tag << endl;
+    //     tmp = tmp->next;
+    // }
+
+
+    cout << "-----------------------------" << endl;
 
     subdiviseOutline(segments, nodes, nb_points_wanted);
+
+    // seg = segments->first;
+    // for(int i=0; i<segments->nb; i++)
+    // {       
+    //     cout << "segment: " << seg->id << endl << "\tnode 1: "<< seg->node1->id << endl << "\tnode 2: "<< seg->node2->id << "\ttag: "<< seg->tag << endl << endl;
+    //     seg=seg->next;
+    // }
+
 
     bool ok = true;
 
@@ -207,7 +256,7 @@ int main(int argc, char **argv)
     }
     else
     {
-        ok = Cavendish(segments, nodes, elements);
+        ok = Cavendish(segments, nodes, elements, iter);
     }
 
     //stop all cavendish had crashed
@@ -220,8 +269,10 @@ int main(int argc, char **argv)
 
     //generate list of points
     tmp = nodes->first;
+    cout << nodes->nb << endl;
     for(i=1; i<nodes->nb+1; i++)
     {
+        //cout << "node " << tmp->id << "\t tag: " << tmp->tag << " iter: "<< i << endl;
         sprintf(line_tmp, "%4d  %s  %s%6d%6d", i, float2scientific(tmp->x, 10).c_str(), float2scientific(tmp->y, 10).c_str(), i, tmp->type);
         str_tmp = line_tmp;
         generated_points.push_back(str_tmp);

@@ -10,6 +10,7 @@ struct Node* initNode(float x, float y, int type)
     node->y    = y;
     node->id   = 0;
     node->type = type;
+    node->tag = 0;
     node->next = NULL;
     node->prev = NULL;
     return node;
@@ -53,6 +54,11 @@ float getAngle(struct Segment* segment1, struct Segment* segment2)
     return atan2(det, dot);
 }
 
+float getAngle(struct Segment* segment)
+{
+    return atan2(segment->node2->y - segment->node1->y, segment->node2->x - segment->node1->x);
+}
+
 void sortSegment(struct List<struct Segment> *segments, struct List<struct Element> *arcs)
 {
     //get how many segments must be sorted
@@ -65,11 +71,14 @@ void sortSegment(struct List<struct Segment> *segments, struct List<struct Eleme
     struct Element *arc = arcs->first;
 
     //add potentials arcs
+    cout << "nb arcs" << arcs->nb << endl;
     for(int i=0; i< arcs->nb; i++)
     {
         inserted = initSegment(arc->node1, arc->node2);
         addElement(segments, inserted);
         inserted->tag = 1;
+        left_segments++;
+        arc = arc ->next;
     }
 
     inserted = popElement(segments, segments->first->id);
@@ -202,28 +211,93 @@ void subdiviseOutline(struct List<struct Segment> *segments, struct List<struct 
     int nb_segment = segments->nb; 
 
     for(int i=0; i< nb_segment; i++)
+    {
+        cout << "segment: " << segment->id << endl << "\tnode 1: "<< segment->node1->id << endl << "\tnode 2: "<< segment->node2->id << "\ttag: "<< segment->tag << endl << endl;
         segment = subdivise(segment, perimeter, nb_points, nodes, segments);
+        cout << "segment: " << segment->id << endl << "\tnode 1: "<< segment->node1->id << endl << "\tnode 2: "<< segment->node2->id << "\ttag: "<< segment->tag << endl << endl;
+        cout << "-------------" << endl;
+    }
 
 }
 
-void subdiviseArc(struct List<struct Segment> *segments, struct List<Element> *arcs, float angle)
+void subdiviseArc(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<Element> *arcs, float delta)
 {
+    reverse(arcs);
     struct Element *arc = arcs->first;
-    struct Segment *seg = segments->first;
-    struct Segment *inserted = NULL;
+    struct Segment *seg = segments->first, *seg_tmp = NULL;
+    struct Segment *inserted = NULL, *seg1 = NULL, *seg2 = NULL;
+    float beta1=0.0f, beta2=0.0f, beta=0.0f, gamma=0.0f, r=0.0f;
+    float x_c = 0.0f, y_c=0.0f;
+    struct Node *node = NULL;
 
+    int original_segments_nb = segments->nb;
+
+
+    for(int i=0; i < original_segments_nb; i++)
+    {
+
+        if(seg->tag)
+        {
+            seg1 = initSegment(arc->node3, seg->node1);
+            seg2 = initSegment(arc->node3, seg->node2);
+
+            beta1 = getAngle(seg1);
+            beta2 = getAngle(seg2);
+            beta  = getAngle(seg1, seg2);
+
+            r = getDistance(seg1);
+            gamma = acos((2.0*r*r-2.0*delta*delta)/(2.0*r*r));
+
+            // cout << "delta: " << delta << endl;
+            // cout << "r: " << r << endl;
+            // cout << "beta1: " << beta1*180/PI << " deg" << endl;
+            // cout << "beta2: " << beta2*180/PI << " deg" << endl;
+            // cout << "beta: " << beta*180/PI << " deg" << endl;
+            // cout << "gamma: " << gamma*180/PI << " deg" << endl;
+
+            int n_segs = (int)round(beta/gamma);
+            gamma = beta/((float)n_segs);
+
+            for(int j=1; j < n_segs+1; j++)
+            {
+
+                x_c = arc->node3->x + r*cos(beta1+gamma*j);
+                y_c = arc->node3->y + r*sin(beta1+gamma*j);
+
+                if(j != n_segs)
+                {
+                    node = initNode(x_c, y_c, ORIGINAL);
+                    addElement(nodes, node);
+                }
+                else
+                    node = arc->node2;
+
+                inserted = initSegment(seg->prev->node2, node);
+                insertElement(segments, inserted, seg->prev->id);
+                cout << "inserted segment: " << inserted->id << endl << "\tnode 1: "<< inserted->node1->id << endl << "\tnode 2: "<< inserted->node2->id << endl << endl;
+                inserted->tag = 0;
+                seg = inserted->next;
+            }
+
+            cout << "##############" << endl;
+            arc = arc->next;
+        }
+        seg = seg->next;
+    }
+
+    seg = segments->first;
     for(int i=0; i < segments->nb; i++)
     {
         if(seg->tag)
         {
-            inserted = initSegment(arc->node1, arc->node2);
-            insertElement(segments, inserted, seg->prev->id);
+            seg_tmp = seg->next;
             popElement(segments, seg->id);
-            arc = arc->next;
-            seg = inserted;
+            seg = seg_tmp;
         }
-        seg = seg->next;
+        else
+            seg = seg->next;
     }
+
 }
 
 
@@ -266,21 +340,22 @@ struct Segment* subdivise(struct Segment *segment_, float perimiter, int n, stru
     return last_segment->next->next;
 }
 
-bool Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements)
+bool Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *nodes, struct List<struct Element> *elements, int iter)
 {
     struct Segment *segment = new struct Segment, *seg1 = NULL, *seg2 = NULL, *seg=NULL;
     struct Segment *generated = NULL;
     struct Node *node = NULL;
     float angle = 0.0f;
     float r = 0.0f, a=0.0f, b=0.0f, x_int=0.0f, y_int=0.0f, diag1 = 0.0f, diag2 = 0.0f;
-    float x_a=0.0f, x_b=0.0f, y_a=0.0f, y_b=0.0f, x_d = 0.0f, y_d =0.0f;
+    float x_a=0.0f, y_a=0.0f, x_b=0.0f, y_b=0.0f, x_d =0.0f, y_d=0.0f;
     int state;
     int i = 0;
     float ratio = sqrt(3)/2.0;
 
     do
     {
-
+        if(i == iter && iter>0)
+            return true;
         angle = minAngle(segments, segment)*180/PI;
 
         //switch between cases
@@ -362,22 +437,8 @@ bool Cavendish(struct List<struct Segment> *segments, struct List<struct Node> *
 
                 a = getDistance(seg);
 
-
-                x_int = -(y_b - x_a + ratio*x_d)/ratio;
-                y_int = -(x_b - y_a + ratio*y_d)/ratio;
-
-                cout << "a: " << a << endl;
-
-                cout << "x_a: " << x_a << endl;
-                cout << "x_b: " << x_b << endl;
-                cout << "x_d: " << x_d << endl;
-                cout << "y_a: " << y_a << endl;
-                cout << "y_b: " << y_b << endl;
-                cout << "y_d: " << y_d << endl;
-
-                cout << x_int << " | " << y_int << endl;
-                cout << "iter: " << i << endl;
-                cout << "------------------------" << endl;
+                x_int = ratio*(y_a - y_b) + x_d;
+                y_int = ratio*(x_b - x_a) + y_d;
 
                 node = initNode(x_int, y_int, ORIGINAL);
 
